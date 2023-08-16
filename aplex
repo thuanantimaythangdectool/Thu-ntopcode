@@ -1,14 +1,241 @@
-{
-   "":{
-      "n1":"?",
-      "n2":"Key Phờ Ri ĐÓ Đi Thuê Đê :))) 6/5/2023"
-   },
-   "ducgiang123":{
-      "n1":"?/?/2023",
-      "n2":"Hạn Của Bạn Đến Ngày 1/8/2023"
-   },
-   "":{
-      "n1":"?/?/2023",
-      "n2":"6/5/2023"
-   }
-}
+from time import sleep
+import re,requests,os,sys,json,colorama,random
+import uuid
+
+def GetPro5(x,proxy,stt):
+	headers = {'authority': 'www.facebook.com','accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9','accept-language': 'vi','cookie': x,'sec-ch-prefers-color-scheme': 'light','sec-ch-ua': '"Chromium";v="106", "Google Chrome";v="106", "Not;A=Brand";v="99"','sec-ch-ua-mobile': '?0','sec-ch-ua-platform': '"Windows"','sec-fetch-dest': 'document','sec-fetch-mode': 'navigate','sec-fetch-site': 'none','sec-fetch-user': '?1','upgrade-insecure-requests': '1','viewport-width': '1366',}
+	if len(str(proxy)) >= 6 :
+		if proxy.count(":") == 3:
+			pr = proxy.split(":")
+			pr = "%s:%s@%s:%s"%(pr[2], pr[3], pr[0], pr[1])
+		else:pr = proxy
+		choose = "http"
+		proxies = {"http": f"{choose}://{pr}" ,"https": f"{choose}://{pr}"}
+		response = requests.get('https://mbasic.facebook.com/',headers=headers, proxies=proxies, timeout=50).text
+	else:
+		response = requests.get('https://mbasic.facebook.com/',headers=headers).text
+	fb_dtsg = response.split('<input type="hidden" name="fb_dtsg" value="')[1].split('"')[0]
+	jazoest = response.split('<input type="hidden" name="jazoest" value="')[1].split('"')[0]
+	uid=x.split("c_user=")[1].split(';')[0]
+	headers = {'authority': 'www.facebook.com','accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9','accept-language': 'vi,en;q=0.9,vi-VN;q=0.8,fr-FR;q=0.7,fr;q=0.6,en-US;q=0.5','cache-control': 'max-age=0','cookie': x,'origin': 'https://www.facebook.com','referer': 'https://www.facebook.com','sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"','sec-ch-ua-mobile': '?0','sec-ch-ua-platform': '"Windows"','sec-fetch-dest': 'document','sec-fetch-mode': 'navigate','sec-fetch-site': 'none','sec-fetch-user': '?1','upgrade-insecure-requests': '1',}
+	idpef = requests.post('https://www.facebook.com/api/graphql/', headers=headers, data={'fb_dtsg': fb_dtsg,'jazoest': jazoest,'variables': '{"showUpdatedLaunchpointRedesign":true,"useAdminedPagesForActingAccount":false,"useNewPagesYouManage":true}','doc_id': '5300338636681652'}, proxies=proxies, timeout=50).json()
+	a = idpef['data']['viewer']['actor']['profile_switcher_eligible_profiles']['nodes']
+	listcoolkie=[]
+	print(f"[{stt}] > Gét Được : {len(a)}  ",end=' ')
+	for b in a:
+		uid = b['profile']['id']
+		listcoolkie.append(f'{x};i_user={uid};|{fb_dtsg}|{jazoest}|{proxy}')
+		print(uid,end=' ')
+	print("")
+	return listcoolkie
+
+
+
+
+def GetTDS(tk,mk,proxy):
+	if proxy.count(":") == 3:
+		pr = proxy.split(":")
+		pr = "%s:%s@%s:%s"%(pr[2], pr[3], pr[0], pr[1])
+	else:pr = proxy
+	choose = "http"
+	proxies = {"http": f"{choose}://{pr}" ,"https": f"{choose}://{pr}"}
+	dau={'content-type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+	data={'username':tk,'password':mk}
+	login=requests.post("https://traodoisub.com/scr/login.php",headers=dau,data=data,allow_redirects=False, proxies=proxies, timeout=10).cookies
+	cktds='PHPSESSID='+login['PHPSESSID']
+	dau={'content-type': 'application/x-www-form-urlencoded; charset=UTF-8','Cookie':cktds}
+	tokentds=requests.get("https://traodoisub.com/view/setting/load.php",headers=dau).json()['xu']
+	return cktds,tokentds,proxies
+
+
+def GetJobLikePage(cktds,proxies):
+	dau={'content-type': 'application/x-www-form-urlencoded; charset=UTF-8','Cookie':cktds}
+	Job=requests.get("https://traodoisub.com/ex/fanpage/load.php",headers=dau, proxies=proxies, timeout=10).json()
+	return Job
+
+def likepage(cookies,fb_dtsg,idpagecanthick,jazoettx,proxies):
+	try:
+		idpro5=cookies.split("i_user=")[1].split(';')[0]
+		fheaders= {'authority': 'www.facebook.com','accept': '*/*','accept-language': 'vi-VN','cookie': cookies,'origin': 'https://www.facebook.com','referer': 'https://www.facebook.com'+idpro5,'sec-ch-prefers-color-scheme': 'dark','sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"','sec-ch-ua-mobile': '?0','sec-ch-ua-platform': '"Windows"','sec-fetch-dest': 'empty','sec-fetch-mode': 'cors','sec-fetch-site': 'same-origin','viewport-width': '979','x-fb-friendly-name': 'AdditionalProfilePlusCreationMutation','x-fb-lsd': 'ZM7FAk6cuRcUp3imwqvHTY','viewport-width': '1366',}
+		datas = {'av': idpro5,'__user': idpro5,'fb_dtsg': fb_dtsg,'jazoest': jazoettx,'variables': '{"input":{"is_tracking_encrypted":false,"page_id":"'+idpagecanthick+'","source":null,"tracking":null,"actor_id":"'+idpro5+'","client_mutation_id":"1"},"scale":1}','doc_id': '4867271226642619',}
+		response = requests.post('https://www.facebook.com/api/graphql/', headers=fheaders, data=datas, proxies=proxies, timeout=10).json()
+		return True
+	except:
+		return False
+def CauHinh(UID,ĐÂU,proxies):
+	T=requests.post("https://traodoisub.com/scr/datnick.php",headers=ĐÂU,data={'iddat': UID}, proxies=proxies, timeout=10).text
+	if T == '1':return True
+	else:return False
+def Delay(s,l):
+	for i in range(s,-1,-1):
+		print(f"[{l}/6] Nghi Ngoi {i}s [-■----]            ",end='\r')
+		sleep(0.05)
+		print(f"[{l}/6] Nghi Ngoi {i}s [--■---]            ",end='\r')
+		sleep(0.05)
+		print(f"[{l}/6] Nghi Ngoi {i}s [---■--]            ",end='\r')
+		sleep(0.05)
+		print(f"[{l}/6] Nghi Ngoi {i}s [----■-]            ",end='\r')
+		sleep(0.05)
+		print(f"[{l}/6] Nghi Ngoi {i}s [---■--]            ",end='\r')
+		sleep(0.05)
+		print(f"[{l}/6] Nghi Ngoi {i}s [--■---]            ",end='\r')
+		sleep(0.05)
+		print(f"[{l}/6] Nghi Ngoi {i}s [-■----]            ",end='\r')
+		sleep(0.05)
+		print(f"[{l}/6] Nghi Ngoi {i}s [--■---]            ",end='\r')
+		sleep(0.05)
+		print(f"[{l}/6] Nghi Ngoi {i}s [---■--]            ",end='\r')
+		sleep(0.05)
+		print(f"[{l}/6] Nghi Ngoi {i}s [----■-]            ",end='\r')
+		sleep(0.05)
+		print(f"[{l}/6] Nghi Ngoi {i}s [---■--]            ",end='\r')
+		sleep(0.05)
+		print(f"[{l}/6] Nghi Ngoi {i}s [--■---]            ",end='\r')
+		sleep(0.05)
+		print(f"[{l}/6] Nghi Ngoi {i}s [-■----]            ",end='\r')
+		sleep(0.05)
+		print(f"[{l}/6] Nghi Ngoi {i}s [--■---]            ",end='\r')
+		sleep(0.05)
+		print(f"[{l}/6] Nghi Ngoi {i}s [---■--]            ",end='\r')
+		sleep(0.05)
+		print(f"[{l}/6] Nghi Ngoi {i}s [----■-]            ",end='\r')
+		sleep(0.05)
+		print(f"[{l}/6] Nghi Ngoi {i}s [---■--]            ",end='\r')
+		sleep(0.05)
+		print(f"[{l}/6] Nghi Ngoi {i}s [--■---]            ",end='\r')
+		sleep(0.05)
+		print(f"[{l}/6] Nghi Ngoi {i}s [-■----]            ",end='\r')
+		sleep(0.05)
+		print(f"[{l}/6] Nghi Ngoi {i}s [--■---]            ",end='\r')
+		sleep(0.05)
+		print(f"[{l}/6] Nghi Ngoi {i}s [---■--]            ",end='\r')
+		sleep(0.05)
+		print(f"[{l}/6] Nghi Ngoi {i}s [----■-]            ",end='\r')
+		sleep(0.05)
+		print(f"[{l}/6] Nghi Ngoi {i}s [---■--]            ",end='\r')
+		sleep(0.05)
+		print(f"[{l}/6] Nghi Ngoi {i}s [--■---]            ",end='\r')
+		sleep(0.05)
+		print(f"[{l}/6] Nghi Ngoi {i}s [-■----]            ",end='\r')
+
+		
+
+
+def UpAVT(cookiesFB,fb_dtsgFB,proxy,listANH):
+	if proxy.count(":") == 3:
+		pr = proxy.split(":")
+		pr = "%s:%s@%s:%s"%(pr[2], pr[3], pr[0], pr[1])
+	else:
+		pr = proxy
+	choose = "http"
+	proxies = {"http": f"{choose}://{pr}" ,"https": f"{choose}://{pr}"}
+	print("   ╰─>  Up Ảnh Đại Diện !!",end='\r')
+	idpro5=cookiesFB.split('i_user=')[1].split(";")[0]
+	fheaders= {'authority': 'www.facebook.com','accept': '*/*','accept-language': 'vi-VN,vi;q=0.9,fr-FR;q=0.8,fr;q=0.7,en-US;q=0.6,en;q=0.5','cookie': cookiesFB,'origin': 'https://www.facebook.com','referer': 'https://www.facebook.com/'+idpro5,'sec-ch-prefers-color-scheme': 'dark','sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"','sec-ch-ua-mobile': '?0','sec-ch-ua-platform': '"Windows"','sec-fetch-dest': 'empty','sec-fetch-mode': 'cors','sec-fetch-site': 'same-origin','user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36','viewport-width': '979','x-fb-friendly-name': 'AdditionalProfilePlusCreationMutation','x-fb-lsd': 'ZM7FAk6cuRcUp3imwqvHTY','viewport-width': '1366',}
+	datas = {'av': idpro5,'__user': idpro5,'fb_dtsg': fb_dtsgFB,'variables': '{"input":{"attribution_id_v2":"ProfileCometTimelineListViewRoot.react,comet.profile.timeline.list,via_cold_start,1682522236720,948878,190055527696468,","caption":"","existing_photo_id":"'+random.choice(listANH)+'","expiration_time":null,"profile_id":"'+idpro5+'","profile_pic_method":"EXISTING","profile_pic_source":"TIMELINE","scaled_crop_rect":{"height":0.80058,"width":1,"x":0,"y":0.09971},"skip_cropping":true,"actor_id":"'+idpro5+'","client_mutation_id":"1"},"isPage":false,"isProfile":true,"sectionToken":"UNKNOWN","collectionToken":"UNKNOWN","scale":1}','server_timestamps': 'true','doc_id': '6041079162654149',}
+	sleep(2)
+	response = requests.post('https://www.facebook.com/api/graphql/', headers=fheaders, data=datas)
+	print("   ╰─> Đã Up Ảnh Đại Diện Lần 1!!",end='\r')
+	sleep(1)
+	response = requests.post('https://www.facebook.com/api/graphql/', headers=fheaders, data=datas)
+	print("   ╰─> Đã Up Ảnh Đại Diện Thành Công !!",end='\r')
+
+	return response.text
+
+def UpBìa(cookiesFB,fb_dtsgFB,proxy,listANH):
+	if proxy.count(":") == 3:
+		pr = proxy.split(":")
+		pr = "%s:%s@%s:%s"%(pr[2], pr[3], pr[0], pr[1])
+	else:
+		pr = proxy
+	choose = "http"
+	proxies = {"http": f"{choose}://{pr}" ,"https": f"{choose}://{pr}"}
+	BoThuan=UpAVT(cookiesFB,fb_dtsgFB,proxy,listANH)
+	# BoThuan=BoThuan.split("photo.php?fbid=")[1].split("&set=a.")[0]
+	# print("   ╰─>  Up Bìa !!",end='\r')
+	# idpro5=cookiesFB.split('i_user=')[1].split(";")[0]
+	# fheaders= {'authority': 'www.facebook.com','accept': '*/*','accept-language': 'vi-VN,vi;q=0.9,fr-FR;q=0.8,fr;q=0.7,en-US;q=0.6,en;q=0.5','cookie': cookiesFB,'origin': 'https://www.facebook.com','sec-ch-prefers-color-scheme': 'dark','sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"','sec-ch-ua-mobile': '?0','sec-ch-ua-platform': '"Windows"','sec-fetch-dest': 'empty','sec-fetch-mode': 'cors','sec-fetch-site': 'same-origin','viewport-width': '979','x-fb-friendly-name': 'AdditionalProfilePlusCreationMutation','x-fb-lsd': 'ZM7FAk6cuRcUp3imwqvHTY','viewport-width': '1366',}
+	# datas = {'fb_dtsg': fb_dtsgFB,'variables': '{"input":{"attribution_id_v2":"ProfileCometTimelineListViewRoot.react,comet.profile.timeline.list,unexpected,1687253370139,81087,190055527696468,","cover_photo_id":"'+BoThuan+'","focus":{"x":0.5,"y":0.4997464503042596},"target_user_id":"'+idpro5+'","actor_id":"'+idpro5+'","client_mutation_id":"3"},"scale":1,"contextualProfileContext":null}','server_timestamps': 'true','doc_id': '6099517113440760',}
+	# response = requests.post('https://www.facebook.com/api/graphql/', headers=fheaders, data=datas)
+	# print("   ╰─> Đã Up Bìa Thành Công !!",end='\r')		
+def ThemUID(UID,cktds,cookiesFB,fb_dtsgFB,proxy,listANH,KeyCapCha):
+	#UpBìa(cookiesFB,fb_dtsgFB,proxy,listANH)
+	Giaicapcha=requests.get(f'https://api.1stcaptcha.com/recaptchav2?apikey={KeyCapCha}&sitekey=6LeGw7IZAAAAAECJDwOUXcriH8HNN7_rkJRZYF8a&siteurl=https://traodoisub.com/&invisible=false').json()
+	print(Giaicapcha,end='\r')
+	idy=Giaicapcha['TaskId']
+	while True:
+		try:
+			token=requests.get(f'https://api.1stcaptcha.com/getresult?apikey={KeyCapCha}&taskid={idy}').json()
+			token=token['Data']['Token']
+			break
+		except:
+			sleep(5)
+	ThemAccVaoTDS=requests.post("https://traodoisub.com/scr/add_uid.php",headers={'Host':f'traodoisub.com','accept':'application/json, text/javascript, */*; q=0.01','Cookie':cktds},data={'idfb':UID ,'g-recaptcha-response':token})
+	print(ThemAccVaoTDS.text)
+def get_ThongTin(email, password, twofactor, type, proxy):
+	if proxy.count(":") == 3:
+		pr = proxy.split(":")
+		pr = "%s:%s@%s:%s"%(pr[2], pr[3], pr[0], pr[1])
+	else:
+		pr = proxy
+	choose = "http"
+	proxies = {"http": f"{choose}://{pr}" ,"https": f"{choose}://{pr}"}
+	try:
+		session = requests.Session()
+		response = session.post(
+			"https://graph.facebook.com/auth/login",
+			data={
+				"locale": "vi_VN",
+				"device_id": str(uuid.uuid4()),
+				"format": "json",
+				"email": email,
+				"password": password,
+				"access_token": "275254692598279|585aec5b4c27376758abb7ffcb9db2af"
+				if type == 1
+				else "350685531728|62f8ce9f74b12f84c123cc23437a4a32"
+				if type == 2
+				else "6628568379%7Cc1e620fa708a1d5696fb991c1bde5662",
+				"generate_session_cookies": "true",
+				"generate_machine_id": "1",
+			}, proxies=proxies, timeout=50
+		).json()
+		if len(twofactor) >=5:
+			twofactor_code = requests.get(f"https://2fa.live/tok/{twofactor}").json()[
+				"token"
+			]
+			response = session.post(
+				"https://graph.facebook.com/auth/login",
+				data={
+					"locale": "vi_VN",
+					"format": "json",
+					"email": email,
+					"device_id": str(uuid.uuid4()),
+					"access_token": "275254692598279|585aec5b4c27376758abb7ffcb9db2af"
+					if type == 1
+					else "350685531728|62f8ce9f74b12f84c123cc23437a4a32"
+					if type == 2
+					else "6628568379%7Cc1e620fa708a1d5696fb991c1bde5662",
+					"generate_session_cookies": "true",
+					"generate_machine_id": "1",
+					"twofactor_code": twofactor_code,
+					"credentials_type": "two_factor",
+					"error_detail_type": "button_with_disabled",
+					"first_factor": response["error"]["error_data"]["login_first_factor"],
+					"password": password,
+					"userid": response["error"]["error_data"]["uid"],
+					"machine_id": response["error"]["error_data"]["machine_id"],
+				}, proxies=proxies, timeout=50
+			).json()
+		access_token = response["access_token"]
+		session_cookies = response["session_cookies"]
+		cookies_list = []
+		for cookies in session_cookies:
+			cookies_name, cookies_value = cookies["name"], cookies["value"]
+			cookies_list.append(f"{cookies_name}={cookies_value}")
+		raw_cookies = ";".join(cookies_list)
+		return {"email": email, "password": password, "2fa": twofactor , "cookie": raw_cookies, "Token": access_token }
+	except:
+		return False
+
+
+
