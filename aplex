@@ -3,111 +3,6 @@ from time import sleep
 import re,requests,os,sys,json,colorama,random
 import uuid
 from threading import Thread
-def UpAVT(cookiesFB,fb_dtsgFB,proxy):
-	listANH=['2349880825145805','2349880825145805','7341068512605672','712374054229003','2349880825145805','373656968247961','2349880825145805','259638076814151','2349880825145805','667118228111580','2349880825145805','245896144876840','2349880825145805','741577567976939']
-	if proxy.count(":") == 3:
-		pr = proxy.split(":")
-		pr = "%s:%s@%s:%s"%(pr[2], pr[3], pr[0], pr[1])
-	else:
-		pr = proxy
-	choose = "http"
-	proxies = {"http": f"{choose}://{pr}" ,"https": f"{choose}://{pr}"}
-	print("   ╰─>  Up Ảnh Đại Diện !!",end='\r')
-	idpro5=cookiesFB.split('i_user=')[1].split(";")[0]
-	fheaders= {
-		 'authority': 'www.facebook.com',
-		 'accept': '*/*',
-		 'accept-language': 'vi-VN,vi;q=0.9,fr-FR;q=0.8,fr;q=0.7,en-US;q=0.6,en;q=0.5',
-		 'cookie': cookiesFB,
-		 'origin': 'https://www.facebook.com',
-		 'referer': 'https://www.facebook.com/'+idpro5,
-		 'sec-ch-prefers-color-scheme': 'dark',
-		 'sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
-		 'sec-ch-ua-mobile': '?0',
-		 'sec-ch-ua-platform': '"Windows"',
-		 'sec-fetch-dest': 'empty',
-		 'sec-fetch-mode': 'cors',
-		 'sec-fetch-site': 'same-origin',
-		 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
-		 'viewport-width': '979',
-		 'x-fb-friendly-name': 'AdditionalProfilePlusCreationMutation',
-		 'x-fb-lsd': 'ZM7FAk6cuRcUp3imwqvHTY',
-		 'viewport-width': '1366',}
-	datas = {
-			'av': idpro5,
-			'__user': idpro5,
-			'fb_dtsg': fb_dtsgFB,
-			'variables': '{"input":{"attribution_id_v2":"ProfileCometTimelineListViewRoot.react,comet.profile.timeline.list,via_cold_start,1682522236720,948878,190055527696468,","caption":"","existing_photo_id":"'+random.choice(listANH)+'","expiration_time":null,"profile_id":"'+idpro5+'","profile_pic_method":"EXISTING","profile_pic_source":"TIMELINE","scaled_crop_rect":{"height":0.80058,"width":1,"x":0,"y":0.09971},"skip_cropping":true,"actor_id":"'+idpro5+'","client_mutation_id":"1"},"isPage":false,"isProfile":true,"sectionToken":"UNKNOWN","collectionToken":"UNKNOWN","scale":1}',
-			'server_timestamps': 'true',
-			'doc_id': '6041079162654149',
-	}
-	sleep(2)
-	response = requests.post('https://www.facebook.com/api/graphql/', headers=fheaders, data=datas, proxies=proxies, timeout=20)
-	sleep(1)
-	response = requests.post('https://www.facebook.com/api/graphql/', headers=fheaders, data=datas, proxies=proxies, timeout=20)
-	print(f"  ╰─> AVATA DONE         ")
-	return response.text
-def KetNoiSever():
-	print(f'Đang Kết Nối SV  ',end='\r')
-def PhuPhepLayJob(x):
-	for i in range(x):
-		print(f"[T]> [\033[35m>\033[39m----------] {i}/{x}  ",end='\r')
-		sleep(0.025)
-		print(f"[T]> [-\033[35m>\033[39m---------] {i}/{x}  ",end='\r')
-		sleep(0.025)
-		print(f"[T]> [--\033[35m>\033[39m--------] {i}/{x}  ",end='\r')
-		sleep(0.025)
-		print(f"[T]> [---\033[35m>\033[39m-------] {i}/{x}  ",end='\r')
-		sleep(0.025)
-		print(f"[T]> [----\033[35m>\033[39m------] {i}/{x}  ",end='\r')
-		sleep(0.025)
-		print(f"[T]> [-----\033[35m>\033[39m-----] {i}/{x}  ",end='\r')
-		sleep(0.025)
-		print(f"[T]> [------\033[35m>\033[39m----] {i}/{x}  ",end='\r')
-		sleep(0.025)
-		print(f"[T]> [-------\033[35m>\033[39m---] {i}/{x}  ",end='\r')
-		sleep(0.025)
-		print(f"[T]> [--------\033[35m>\033[39m--] {i}/{x}  ",end='\r')
-		sleep(0.025)
-		print(f"[T]> [---------\033[35m>\033[39m-] {i}/{x}  ",end='\r')
-		sleep(0.025)
-		print(f"[T]> [----------\033[35m<\033[39m] {i}/{x}  ",end='\r')
-		sleep(0.025)
-		print(f"[T]> [---------\033[35m<\033[39m-] {i}/{x}  ",end='\r')
-		sleep(0.025)
-		print(f"[T]> [--------\033[35m<\033[39m--] {i}/{x}  ",end='\r')
-		sleep(0.025)
-		print(f"[T]> [-------\033[35m<\033[39m---] {i}/{x}  ",end='\r')
-		sleep(0.025)
-		print(f"[T]> [------\033[35m<\033[39m----] {i}/{x}  ",end='\r')
-		sleep(0.025)
-		print(f"[T]> [-----\033[35m<\033[39m-----] {i}/{x}  ",end='\r')
-		sleep(0.025)
-		print(f"[T]> [----\033[35m<\033[39m------] {i}/{x}  ",end='\r')
-		sleep(0.025)
-		print(f"[T]> [---\033[35m<\033[39m-------] {i}/{x}  ",end='\r')
-		sleep(0.025)
-		print(f"[T]> [--\033[35m<\033[39m--------] {i}/{x}  ",end='\r')
-		sleep(0.025)
-		print(f"[T]> [-\033[35m<\033[39m---------] {i}/{x}  ",end='\r')
-def PRX(proxy):
-	if proxy.count(":") == 3:
-		pr = proxy.split(":")
-		pr = "%s:%s@%s:%s"%(pr[2], pr[3], pr[0], pr[1])
-	else:pr = proxy
-	choose = "http"
-	proxies = {"http": f"{choose}://{pr}" ,"https": f"{choose}://{pr}"}
-	return proxies
-def get_ttc(tk,mk,proxies):
-	LSPR5=["103.3.246.170:4990:sun24990:wtnoj","103.3.246.170:4006:sun74006:tcqe6","103.121.89.172:3612:sun93612:bbr7r","103.121.89.70:4435:sun34435:mrpz2","103.121.91.30:4373:sun74373:a2o0m","103.162.31.140:4584:sun44584:znlt1","103.79.143.137:22399:sun422399:icges","103.121.89.87:3301:sun53301:c113m","103.121.89.53:4554:sun24554:2hc0u","103.121.90.41:4003:sun64003:hajzu","103.121.89.70:4891:sun24891:ktvzh","103.3.246.137:4504:sun34504:r1mw0","103.162.31.223:4663:sun14663:i6586","103.121.89.53:4942:sun04942:vwze4","103.121.89.172:3511:sun53511:7wtiz","103.3.246.137:4905:sun64905:47lyz","103.162.31.140:4884:sun64884:wst39","103.121.89.172:3404:sun73404:t7dkc","103.162.31.223:4931:sun74931:b1bpt","103.3.246.128:4148:sun04148:m5jin","103.79.142.154:4101:sun24101:w7spn","103.121.91.30:4439:sun94439:fm26t","103.121.89.70:4722:sun54722:mgvli","103.121.89.172:3804:sun23804:bmzid","103.3.246.135:3175:sun93175:ydrgu","103.3.246.170:4031:sun04031:vinlm","103.79.142.154:4053:sun24053:jji5i","103.162.31.223:4724:sun04724:aokl4","103.162.31.223:4194:sun04194:adhoe","103.162.31.109:3968:sun53968:8qk3k","103.121.89.87:3959:sun53959:67fiv","103.121.91.30:4666:sun84666:2c8w7","103.3.246.135:3663:sun83663:uhm0r","103.121.90.69:20029:sun220029:w4spk","103.162.31.188:3323:sun83323:fky1c","45.124.84.160:4965:sun64965:dcsdp","103.161.17.11:4157:sun04157:es6ke","45.124.84.160:4191:sun34191:nh0ar","103.121.90.69:20249:sun620249:5sybq","103.121.89.70:4719:sun94719:gqc0i","103.121.90.69:20663:sun620663:3kd3m","103.121.89.87:3239:sun13239:wotyi","103.162.31.140:4573:sun64573:uyyqd","103.3.246.170:4547:sun84547:b5akm","103.121.90.69:20346:sun820346:y07gp","103.121.89.53:4196:sun34196:dpulu","103.121.90.69:20114:sun120114:4ilhr","103.162.31.140:4512:sun74512:qd2nb","103.162.31.109:3280:sun13280:13crw","103.162.31.109:3708:sun33708:iaye6",]
-	proxy=random.choice(LSPR5)
-	proxies=PRX(proxy)
-	daulogin={
-	'content-type': 'application/x-www-form-urlencoded'
-	}
-	a=requests.post('https://tuongtaccheo.com/login.php',headers=daulogin,data={'username': tk,'password': mk,'submit': 'ĐĂNG NHẬP'},allow_redirects=False, proxies=proxies, timeout=10).cookies
-	cookie='PHPSESSID='+a['PHPSESSID']
-	return cookie
 def GetPro5(x,proxy,stt):
 	try:
 		headers = {'authority': 'www.facebook.com','accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9','accept-language': 'vi','cookie': x,'sec-ch-prefers-color-scheme': 'light','sec-ch-ua': '"Chromium";v="106", "Google Chrome";v="106", "Not;A=Brand";v="99"','sec-ch-ua-mobile': '?0','sec-ch-ua-platform': '"Windows"','sec-fetch-dest': 'document','sec-fetch-mode': 'navigate','sec-fetch-site': 'none','sec-fetch-user': '?1','upgrade-insecure-requests': '1','viewport-width': '1366',}
@@ -194,191 +89,33 @@ def Lấy_Thông_Tin(proxy,TK,MK,Hai2fa,Số):
 		return ListPro5
 	except:
 		return False
-def cauhinh(id, cookie,proxies):
-	LSPR5=["103.3.246.170:4990:sun24990:wtnoj","103.3.246.170:4006:sun74006:tcqe6","103.121.89.172:3612:sun93612:bbr7r","103.121.89.70:4435:sun34435:mrpz2","103.121.91.30:4373:sun74373:a2o0m","103.162.31.140:4584:sun44584:znlt1","103.79.143.137:22399:sun422399:icges","103.121.89.87:3301:sun53301:c113m","103.121.89.53:4554:sun24554:2hc0u","103.121.90.41:4003:sun64003:hajzu","103.121.89.70:4891:sun24891:ktvzh","103.3.246.137:4504:sun34504:r1mw0","103.162.31.223:4663:sun14663:i6586","103.121.89.53:4942:sun04942:vwze4","103.121.89.172:3511:sun53511:7wtiz","103.3.246.137:4905:sun64905:47lyz","103.162.31.140:4884:sun64884:wst39","103.121.89.172:3404:sun73404:t7dkc","103.162.31.223:4931:sun74931:b1bpt","103.3.246.128:4148:sun04148:m5jin","103.79.142.154:4101:sun24101:w7spn","103.121.91.30:4439:sun94439:fm26t","103.121.89.70:4722:sun54722:mgvli","103.121.89.172:3804:sun23804:bmzid","103.3.246.135:3175:sun93175:ydrgu","103.3.246.170:4031:sun04031:vinlm","103.79.142.154:4053:sun24053:jji5i","103.162.31.223:4724:sun04724:aokl4","103.162.31.223:4194:sun04194:adhoe","103.162.31.109:3968:sun53968:8qk3k","103.121.89.87:3959:sun53959:67fiv","103.121.91.30:4666:sun84666:2c8w7","103.3.246.135:3663:sun83663:uhm0r","103.121.90.69:20029:sun220029:w4spk","103.162.31.188:3323:sun83323:fky1c","45.124.84.160:4965:sun64965:dcsdp","103.161.17.11:4157:sun04157:es6ke","45.124.84.160:4191:sun34191:nh0ar","103.121.90.69:20249:sun620249:5sybq","103.121.89.70:4719:sun94719:gqc0i","103.121.90.69:20663:sun620663:3kd3m","103.121.89.87:3239:sun13239:wotyi","103.162.31.140:4573:sun64573:uyyqd","103.3.246.170:4547:sun84547:b5akm","103.121.90.69:20346:sun820346:y07gp","103.121.89.53:4196:sun34196:dpulu","103.121.90.69:20114:sun120114:4ilhr","103.162.31.140:4512:sun74512:qd2nb","103.162.31.109:3280:sun13280:13crw","103.162.31.109:3708:sun33708:iaye6",]
-	proxy=random.choice(LSPR5)
-	proxies=PRX(proxy)
-	url = 'https://tuongtaccheo.com/cauhinh/datnick.php'
-	data = f'iddat%5B%5D={id}&loai=fb'
-	head ={
-	'Host':'tuongtaccheo.com',
-	'accept':'*/*',
-	'user-agent':'Mozilla/5.0 (Linux; Android 8.1.0; CPH1912 Build/O11019) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/107.0.5304.91 Mobile Safari/537.36',
-	'content-type':'application/x-www-form-urlencoded; charset=UTF-8',
-	'cookie':f'{cookie}'
-	}
-	ve = requests.post(url= url, headers= head , data= data, proxies=proxies, timeout=10).text
-	return ve
-def get_cookie_ttc(token) :
-	data = {
-	'access_token': token
-	}
-	text_1 = requests.post("https://tuongtaccheo.com/logintoken.php", data= data, proxies=proxies, timeout=10)
-	log = text_1.json()["status"]
-	if log == "success" :
-		xu = text_1.json()["data"]["sodu"]
-		name = text_1.json()["data"]["user"]
-		print ('Đăng Nhập Thành Công ',end='\r')
-		print (f'Tài Khoản: {name} \nXu Hiện Tại : {xu} ')
-		cookie = text_1.headers["Set-Cookie"]
-	else :
-		print (' Đăng Nhập Thất Bại ')
-		exit()
+def LoginFB():
+	DauVao=[]
+	BoMayCheckDuoc=open('Dữ_Liệu_Vào.txt').readlines()
+	for XoaXuongDong in BoMayCheckDuoc:
+		DauVao.append(XoaXuongDong.split("\n")[0])
+	TK=DauVao[0].split("|")[0]
+	MK=DauVao[0].split("|")[1]
+	KeyAPI=DauVao[0].split("|")[2]
+	DauVao.remove(DauVao[0])
+	return TK,MK,KeyAPI,DauVao
+def Đăng_Nhập_TTC(TK,MK):
+	a=requests.post('https://tuongtaccheo.com/login.php',headers={'content-type': 'application/x-www-form-urlencoded'},data={'username': TK,'password': MK,'submit': 'ĐĂNG NHẬP'},allow_redirects=False).cookies
+	cookie='PHPSESSID='+a['PHPSESSID']
 	return cookie
-
-def Delay(s,l):
-	for i in range(s,-1,-1):
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [-■----]            ",end='\r')
-		sleep(0.05)
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [--■---]            ",end='\r')
-		sleep(0.05)
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [---■--]            ",end='\r')
-		sleep(0.05)
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [----■-]            ",end='\r')
-		sleep(0.05)
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [---■--]            ",end='\r')
-		sleep(0.05)
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [--■---]            ",end='\r')
-		sleep(0.05)
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [-■----]            ",end='\r')
-		sleep(0.05)
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [--■---]            ",end='\r')
-		sleep(0.05)
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [---■--]            ",end='\r')
-		sleep(0.05)
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [----■-]            ",end='\r')
-		sleep(0.05)
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [---■--]            ",end='\r')
-		sleep(0.05)
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [--■---]            ",end='\r')
-		sleep(0.05)
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [-■----]            ",end='\r')
-		sleep(0.05)
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [--■---]            ",end='\r')
-		sleep(0.05)
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [---■--]            ",end='\r')
-		sleep(0.05)
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [----■-]            ",end='\r')
-		sleep(0.05)
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [---■--]            ",end='\r')
-		sleep(0.05)
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [--■---]            ",end='\r')
-		sleep(0.05)
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [-■----]            ",end='\r')
-		sleep(0.05)
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [--■---]            ",end='\r')
-		sleep(0.05)
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [---■--]            ",end='\r')
-		sleep(0.05)
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [----■-]            ",end='\r')
-		sleep(0.05)
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [---■--]            ",end='\r')
-		sleep(0.05)
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [--■---]            ",end='\r')
-		sleep(0.05)
-		print(f"[{l}/6] Nghỉ Tý Đm {i}s [-■----]            ",end='\r')
-def get_job(loai,cookie,proxies):
-	head = {
-	'Host':'tuongtaccheo.com',
-	'accept':'application/json, text/javascript, */*; q=0.01',
-	'cookie':f'{cookie}',
-	'x-requested-with':'XMLHttpRequest'
-	}
-	get_nv = requests.get(f'https://tuongtaccheo.com/kiemtien{loai}getpost.php',headers=head, proxies=proxies, timeout=10)
-	return get_nv
-def likepage(cookies,fb_dtsg,idpagecanthick,proxies):
-	try:
-		idpro5=cookies.split("i_user=")[1].split(';')[0]
-		fheaders= {'authority': 'www.facebook.com','accept': '*/*','accept-language': 'vi-VN','cookie': cookies,'origin': 'https://www.facebook.com','referer': 'https://www.facebook.com'+idpro5,'sec-ch-prefers-color-scheme': 'dark','sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"','sec-ch-ua-mobile': '?0','sec-ch-ua-platform': '"Windows"','sec-fetch-dest': 'empty','sec-fetch-mode': 'cors','sec-fetch-site': 'same-origin','viewport-width': '979','x-fb-friendly-name': 'AdditionalProfilePlusCreationMutation','x-fb-lsd': 'ZM7FAk6cuRcUp3imwqvHTY','viewport-width': '1366',}
-		datas = {'av': idpro5,'__user': idpro5,'fb_dtsg': fb_dtsg,'variables': '{"input":{"is_tracking_encrypted":false,"page_id":"'+idpagecanthick+'","source":null,"tracking":null,"actor_id":"'+idpro5+'","client_mutation_id":"1"},"scale":1}','doc_id': '4867271226642619',}
-		response = requests.post('https://www.facebook.com/api/graphql/', headers=fheaders, data=datas, proxies=proxies, timeout=10).json()
-		return True
-	except:
-		return False
-def nhanxu(cookie,loai,data):
-	url = f'https://tuongtaccheo.com/kiemtien{loai}nhantien.php'
-	head = {
-	'Host':'tuongtaccheo.com',
-	'accept':'*/*',
-	'x-requested-with':'XMLHttpRequest',
-	'user-agent':'Mozilla/5.0 (Linux; Android 8.1.0; CPH1912 Build/O11019) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/107.0.5304.91 Mobile Safari/537.36',
-	'content-type':'application/x-www-form-urlencoded; charset=UTF-8',
-	'referer':f'https://tuongtaccheo.com/kiemtien{loai}',
-	'cookie':f'{cookie}'
-	}
-	nhan = requests.post(url= url, headers= head , data= data).json()
-	return nhan
-def ThemNick(uid,cookie,proxies,KeyCap,proxy,cookiesFB,fb_dtsgFB):
-	UpBìa(cookiesFB,fb_dtsgFB,proxy)
-	Giaicapcha=requests.get(f'https://api.1stcaptcha.com/recaptchav2?apikey={KeyCap}&sitekey=6Lcp7hcUAAAAAJafojnrzQU-DliPkgIiNSGFnVej&siteurl=https://tuongtaccheo.com/&invisible=false').json()
-	idy=Giaicapcha['TaskId']
-	while True:
-		try:
-			token=requests.get(f'https://api.1stcaptcha.com/getresult?apikey={KeyCap}&taskid={idy}').json()
-			token=token['Data']['Token']
-			break
-		except:
-			sleep(5)
-	head ={
-	'Host':'tuongtaccheo.com',
-	'accept':'*/*',
-	'user-agent':'Mozilla/5.0 (Linux; Android 8.1.0; CPH1912 Build/O11019) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/107.0.5304.91 Mobile Safari/537.36',
-	'content-type':'application/x-www-form-urlencoded; charset=UTF-8',
-	'cookie':f'{cookie}'
-	}
-	data={
-	'link': uid,
-	'loainick': 'fb',
-	'recaptcha': token
-	}
-	r=requests.post("https://tuongtaccheo.com/cauhinh/nhapnick.php",headers=head,data=data, proxies=proxies, timeout=10).text
-	Delay(5,5)
-	if r=='1':return True
-	else:return False
-def CheckXu(ck):
-	head = {
-			'Host':'tuongtaccheo.com',
-			'accept':'*/*',
-			'x-requested-with':'XMLHttpRequest',
-			'user-agent':'Mozilla/5.0 (Linux; Android 8.1.0; CPH1912 Build/O11019) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/107.0.5304.91 Mobile Safari/537.36',
-			'content-type':'application/x-www-form-urlencoded; charset=UTF-8',
-			'referer':f'https://tuongtaccheo.com/caidat/',
-			'cookie':ck
-				}
-	a=requests.get("https://tuongtaccheo.com/caidat/",headers=head).text.split('"soduchinh">')[1].split("<")[0]
-	return a
-def CheckCauHinh(ListACC,ckttc,KeyCap,ALLUID):
-	tien=requests.get(f"https://api.1stcaptcha.com/user/balance?apikey={KeyCap}")
-	c=int(float(tien.json()['Balance'])/0.00055)
-	a=tien.json()['Balance']
-	print(f"Có : {a}$  ==> {c} Lượt")
-	stt=0
-	for i in ListACC:
-		stt+=1
-		AI_ĐI=i.split("i_user=")[1].split(";")[0]
-		BOROXY=i.split("|")[2]
-		cookiesFB=i.split("|")[0]
-		fb_dtsgFB=i.split("|")[1]
-		if AI_ĐI in ALLUID:
-			print(f"[{stt}]>> {AI_ĐI} Đã Thêm Rồi!")
-		else:
-			LSPR5=["103.3.246.170:4990:sun24990:wtnoj","103.3.246.170:4006:sun74006:tcqe6","103.121.89.172:3612:sun93612:bbr7r","103.121.89.70:4435:sun34435:mrpz2","103.121.91.30:4373:sun74373:a2o0m","103.162.31.140:4584:sun44584:znlt1","103.79.143.137:22399:sun422399:icges","103.121.89.87:3301:sun53301:c113m","103.121.89.53:4554:sun24554:2hc0u","103.121.90.41:4003:sun64003:hajzu","103.121.89.70:4891:sun24891:ktvzh","103.3.246.137:4504:sun34504:r1mw0","103.162.31.223:4663:sun14663:i6586","103.121.89.53:4942:sun04942:vwze4","103.121.89.172:3511:sun53511:7wtiz","103.3.246.137:4905:sun64905:47lyz","103.162.31.140:4884:sun64884:wst39","103.121.89.172:3404:sun73404:t7dkc","103.162.31.223:4931:sun74931:b1bpt","103.3.246.128:4148:sun04148:m5jin","103.79.142.154:4101:sun24101:w7spn","103.121.91.30:4439:sun94439:fm26t","103.121.89.70:4722:sun54722:mgvli","103.121.89.172:3804:sun23804:bmzid","103.3.246.135:3175:sun93175:ydrgu","103.3.246.170:4031:sun04031:vinlm","103.79.142.154:4053:sun24053:jji5i","103.162.31.223:4724:sun04724:aokl4","103.162.31.223:4194:sun04194:adhoe","103.162.31.109:3968:sun53968:8qk3k","103.121.89.87:3959:sun53959:67fiv","103.121.91.30:4666:sun84666:2c8w7","103.3.246.135:3663:sun83663:uhm0r","103.121.90.69:20029:sun220029:w4spk","103.162.31.188:3323:sun83323:fky1c","45.124.84.160:4965:sun64965:dcsdp","103.161.17.11:4157:sun04157:es6ke","45.124.84.160:4191:sun34191:nh0ar","103.121.90.69:20249:sun620249:5sybq","103.121.89.70:4719:sun94719:gqc0i","103.121.90.69:20663:sun620663:3kd3m","103.121.89.87:3239:sun13239:wotyi","103.162.31.140:4573:sun64573:uyyqd","103.3.246.170:4547:sun84547:b5akm","103.121.90.69:20346:sun820346:y07gp","103.121.89.53:4196:sun34196:dpulu","103.121.90.69:20114:sun120114:4ilhr","103.162.31.140:4512:sun74512:qd2nb","103.162.31.109:3280:sun13280:13crw","103.162.31.109:3708:sun33708:iaye6",]
-			proxy=random.choice(LSPR5)
-			proxies=PRX(proxy)
-			Cấu=cauhinh(AI_ĐI,ckttc,proxies)
-			if Cấu == '1':
-				print(f"[{stt}]>> {AI_ĐI} Đã Thêm Rồi!")
-				Delay(5,5)
-			else:
-				print(f"[{stt}]>> Đã Giải Captcha !",end='\r')
-				Thêm=ThemNick(AI_ĐI,ckttc,proxies,KeyCap,BOROXY,cookiesFB,fb_dtsgFB)
-				if Thêm == True:
-					print(f"[{stt}]>> {AI_ĐI} Thêm Thành Công!")
-				else:
-					print(f"[{stt}]>> {AI_ĐI} Có Lỗi Sải Ra! ")
+def PhuPhepLayJob(x):
+	for sss in range(x):
+		for i in range(20):
+			print(f"[T]> ["+'═'*(20-i)+"\033[36m<==\033[33m•\033[36m>\033[39m"+'═'*i+f"] {sss}/{x}%  ",end='\r')
+			sleep(0.05)
+		for i in range(20):
+			print(f"[T]> ["+'═'*i+f"\033[36m<\033[33m•\033[36m==>\033[39m"+'═'*(20-i)+f"] {sss}/{x}%  ",end='\r')
+			sleep(0.05)
+	print("                                       ",end='\r')
+def cauhinh(id, cookie):
+	return requests.post(url= 'https://tuongtaccheo.com/cauhinh/datnick.php', headers={'Host':'tuongtaccheo.com','accept':'*/*','user-agent':'Mozilla/5.0 (Linux; Android 8.1.0; CPH1912 Build/O11019) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/107.0.5304.91 Mobile Safari/537.36','content-type':'application/x-www-form-urlencoded; charset=UTF-8','cookie':f'{cookie}'} , data=f'iddat%5B%5D={id}&loai=fb').text
 def CheckUIDCH(ckttc):
-	head = {'Host':'tuongtaccheo.com','accept':'*/*','x-requested-with':'XMLHttpRequest','user-agent':'Mozilla/5.0 (Linux; Android 8.1.0; CPH1912 Build/O11019) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/107.0.5304.91 Mobile Safari/537.36','content-type':'application/x-www-form-urlencoded; charset=UTF-8','referer':f'https://tuongtaccheo.com/cauhinh/','cookie':f'{ckttc}'}
-	a=requests.get("https://tuongtaccheo.com/cauhinh/facebook.php",headers=head).text
+	a=requests.get("https://tuongtaccheo.com/cauhinh/facebook.php",headers={'Host':'tuongtaccheo.com','accept':'*/*','x-requested-with':'XMLHttpRequest','user-agent':'Mozilla/5.0 (Linux; Android 8.1.0; CPH1912 Build/O11019) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/107.0.5304.91 Mobile Safari/537.36','content-type':'application/x-www-form-urlencoded; charset=UTF-8','referer':f'https://tuongtaccheo.com/cauhinh/','cookie':f'{ckttc}'}).text
 	sttuid=2
 	ALL=[]
 	while True:
@@ -389,6 +126,64 @@ def CheckUIDCH(ckttc):
 		except:
 			break
 	return ALL
+def Delay(x,t):
+	for i in range(x,-1,-1):
+		print(f'{t} : {i}s         ',end='\r')
+		sleep(1)
+def ThemCauHinhTTC(UID,ckttc,KeyCap,cookiesFB,fb_dtsgFB,proxy):
+	tien=requests.get(f"https://api.1stcaptcha.com/user/balance?apikey={KeyCap}")
+	c=int(float(tien.json()['Balance'])/0.00055)
+	a=tien.json()['Balance']
+	print(f"[T]>> Có : {a}$  ==> {c} Lượt")
+	UpBìa(cookiesFB,fb_dtsgFB,proxy)
+	print(f'Giải Captchat !!',end='\r')
+	Giaicapcha=requests.get(f'https://api.1stcaptcha.com/recaptchav2?apikey={KeyCap}&sitekey=6Lcp7hcUAAAAAJafojnrzQU-DliPkgIiNSGFnVej&siteurl=https://tuongtaccheo.com/&invisible=false').json()
+	idy=Giaicapcha['TaskId']
+	while True:
+		try:
+			token=requests.get(f'https://api.1stcaptcha.com/getresult?apikey={KeyCap}&taskid={idy}').json()
+			token=token['Data']['Token']
+			break
+		except:Delay(5,'Giải Captchat')
+	head ={'Host':'tuongtaccheo.com','accept':'*/*','user-agent':'Mozilla/5.0 (Linux; Android 8.1.0; CPH1912 Build/O11019) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/107.0.5304.91 Mobile Safari/537.36','content-type':'application/x-www-form-urlencoded; charset=UTF-8','cookie':f'{ckttc}'}
+	data={'link': UID,'loainick': 'fb','recaptcha': token}
+	r=requests.post("https://tuongtaccheo.com/cauhinh/nhapnick.php",headers=head,data=data).text
+	Delay(5,'Thêm Cấu Hình')
+	if r=='1':
+		Write.Print(f'[T]> {UID} Thêm Cấu Hình Thành Công\n',Colors.yellow,interval=0.01)
+	else:
+		Write.Print(f'[T]> {UID} Thêm Cấu Hình Thất Bại Kiểm Trả Điều Kiện\n',Colors.yellow,interval=0.01)
+	if r=='1':return True
+	else:return False
+def Lấy_Kinh_Niệm_Phật(loai,cookie):
+	head = {'Host':'tuongtaccheo.com','accept':'application/json, text/javascript, */*; q=0.01','cookie':f'{cookie}','x-requested-with':'XMLHttpRequest'}
+	get_nv = requests.get(f'https://tuongtaccheo.com/kiemtien{loai}getpost.php',headers=head)
+	return get_nv
+def likepage(cookies,fb_dtsg,idpagecanthick,proxies):
+	try:
+		idpro5=cookies.split("i_user=")[1].split(';')[0]
+		fheaders= {'authority': 'www.facebook.com','accept': '*/*','accept-language': 'vi-VN','cookie': cookies,'origin': 'https://www.facebook.com','referer': 'https://www.facebook.com'+idpro5,'sec-ch-prefers-color-scheme': 'dark','sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"','sec-ch-ua-mobile': '?0','sec-ch-ua-platform': '"Windows"','sec-fetch-dest': 'empty','sec-fetch-mode': 'cors','sec-fetch-site': 'same-origin','viewport-width': '979','x-fb-friendly-name': 'AdditionalProfilePlusCreationMutation','x-fb-lsd': 'ZM7FAk6cuRcUp3imwqvHTY','viewport-width': '1366',}
+		datas = {'av': idpro5,'__user': idpro5,'fb_dtsg': fb_dtsg,'variables': '{"input":{"is_tracking_encrypted":false,"page_id":"'+idpagecanthick+'","source":null,"tracking":null,"actor_id":"'+idpro5+'","client_mutation_id":"1"},"scale":1}','doc_id': '4867271226642619',}
+		response = requests.post('https://www.facebook.com/api/graphql/', headers=fheaders, data=datas, proxies=proxies, timeout=10).json()
+		return True
+	except:
+		return False
+def PRX(proxy):
+	if proxy.count(":") == 3:
+		pr = proxy.split(":")
+		pr = "%s:%s@%s:%s"%(pr[2], pr[3], pr[0], pr[1])
+	else:pr = proxy
+	choose = "http"
+	proxies = {"http": f"{choose}://{pr}" ,"https": f"{choose}://{pr}"}
+	return proxies
+def nhanxu(cookie,loai,data):
+	head = {'Host':'tuongtaccheo.com','accept':'*/*','x-requested-with':'XMLHttpRequest','user-agent':'Mozilla/5.0 (Linux; Android 8.1.0; CPH1912 Build/O11019) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/107.0.5304.91 Mobile Safari/537.36','content-type':'application/x-www-form-urlencoded; charset=UTF-8','referer':f'https://tuongtaccheo.com/kiemtien{loai}','cookie':f'{cookie}'}
+	nhan = requests.post(url= f'https://tuongtaccheo.com/kiemtien{loai}nhantien.php', headers= head , data= data).json()
+	return nhan
+def CheckXu(ck):
+	head = {'Host':'tuongtaccheo.com','accept':'*/*','x-requested-with':'XMLHttpRequest','user-agent':'Mozilla/5.0 (Linux; Android 8.1.0; CPH1912 Build/O11019) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/107.0.5304.91 Mobile Safari/537.36','content-type':'application/x-www-form-urlencoded; charset=UTF-8','referer':f'https://tuongtaccheo.com/caidat/','cookie':ck	}
+	a=requests.get("https://tuongtaccheo.com/caidat/",headers=head).text.split('"soduchinh">')[1].split("<")[0]
+	return a
 def doixu(caidaubuoi):
 	caidaubuoi=str(caidaubuoi)
 	if len(caidaubuoi)==5:
@@ -406,6 +201,47 @@ def doixu(caidaubuoi):
 	else:
 		concu=caidaubuoi
 	return concu
+
+
+def UpAVT(cookiesFB,fb_dtsgFB,proxy):
+	listANH=['2349880825145805','2349880825145805','7341068512605672','712374054229003','2349880825145805','373656968247961','2349880825145805','259638076814151','2349880825145805','667118228111580','2349880825145805','245896144876840','2349880825145805','741577567976939']
+	if proxy.count(":") == 3:
+		pr = proxy.split(":")
+		pr = "%s:%s@%s:%s"%(pr[2], pr[3], pr[0], pr[1])
+	else:
+		pr = proxy
+	choose = "http"
+	proxies = {"http": f"{choose}://{pr}" ,"https": f"{choose}://{pr}"}
+	print("   ╰─>  Up Ảnh Đại Diện !!",end='\r')
+	idpro5=cookiesFB.split('i_user=')[1].split(";")[0]
+	fheaders= {
+		 'authority': 'www.facebook.com',
+		 'accept': '*/*',
+		 'accept-language': 'vi-VN,vi;q=0.9,fr-FR;q=0.8,fr;q=0.7,en-US;q=0.6,en;q=0.5',
+		 'cookie': cookiesFB,
+		 'origin': 'https://www.facebook.com',
+		 'referer': 'https://www.facebook.com/'+idpro5,
+		 'sec-ch-prefers-color-scheme': 'dark',
+		 'sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
+		 'sec-ch-ua-mobile': '?0',
+		 'sec-ch-ua-platform': '"Windows"',
+		 'sec-fetch-dest': 'empty',
+		 'sec-fetch-mode': 'cors',
+		 'sec-fetch-site': 'same-origin',
+		 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
+		 'viewport-width': '979',
+		 'x-fb-friendly-name': 'AdditionalProfilePlusCreationMutation',
+		 'x-fb-lsd': 'ZM7FAk6cuRcUp3imwqvHTY',
+		 'viewport-width': '1366',}
+	datas = {'av': idpro5,'__user': idpro5,'fb_dtsg': fb_dtsgFB,'variables': '{"input":{"attribution_id_v2":"ProfileCometTimelineListViewRoot.react,comet.profile.timeline.list,via_cold_start,1682522236720,948878,190055527696468,","caption":"","existing_photo_id":"'+random.choice(listANH)+'","expiration_time":null,"profile_id":"'+idpro5+'","profile_pic_method":"EXISTING","profile_pic_source":"TIMELINE","scaled_crop_rect":{"height":0.80058,"width":1,"x":0,"y":0.09971},"skip_cropping":true,"actor_id":"'+idpro5+'","client_mutation_id":"1"},"isPage":false,"isProfile":true,"sectionToken":"UNKNOWN","collectionToken":"UNKNOWN","scale":1}','server_timestamps': 'true','doc_id': '6041079162654149',}
+	sleep(2)
+	response = requests.post('https://www.facebook.com/api/graphql/', headers=fheaders, data=datas, proxies=proxies, timeout=20)
+	sleep(1)
+	datas = {'av': idpro5,'__user': idpro5,'fb_dtsg': fb_dtsgFB,'variables': '{"input":{"attribution_id_v2":"ProfileCometTimelineListViewRoot.react,comet.profile.timeline.list,via_cold_start,1682522236720,948878,190055527696468,","caption":"","existing_photo_id":"'+random.choice(listANH)+'","expiration_time":null,"profile_id":"'+idpro5+'","profile_pic_method":"EXISTING","profile_pic_source":"TIMELINE","scaled_crop_rect":{"height":0.80058,"width":1,"x":0,"y":0.09971},"skip_cropping":true,"actor_id":"'+idpro5+'","client_mutation_id":"1"},"isPage":false,"isProfile":true,"sectionToken":"UNKNOWN","collectionToken":"UNKNOWN","scale":1}','server_timestamps': 'true','doc_id': '6041079162654149',}
+	
+	response = requests.post('https://www.facebook.com/api/graphql/', headers=fheaders, data=datas, proxies=proxies, timeout=20)
+	print(f"  ╰─> AVATA DONE            ",end='\r')
+	return response.text
 def UpBìa(cookiesFB,fb_dtsgFB,proxy):
 	if proxy.count(":") == 3:
 		pr = proxy.split(":")
@@ -418,28 +254,8 @@ def UpBìa(cookiesFB,fb_dtsgFB,proxy):
 	BoThuan=BoThuan.split("photo.php?fbid=")[1].split("&set=a.")[0]
 	print("   ╰─>  Up Bìa !!",end='\r')
 	idpro5=cookiesFB.split('i_user=')[1].split(";")[0]
-	fheaders= {
-		 'authority': 'www.facebook.com',
-		 'accept': '*/*',
-		 'accept-language': 'vi-VN,vi;q=0.9,fr-FR;q=0.8,fr;q=0.7,en-US;q=0.6,en;q=0.5',
-		 'cookie': cookiesFB,
-		 'origin': 'https://www.facebook.com',
-		 'sec-ch-prefers-color-scheme': 'dark',
-		 'sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
-		 'sec-ch-ua-mobile': '?0',
-		 'sec-ch-ua-platform': '"Windows"',
-		 'sec-fetch-dest': 'empty',
-		 'sec-fetch-mode': 'cors',
-		 'sec-fetch-site': 'same-origin',
-		 'viewport-width': '979',
-		 'x-fb-friendly-name': 'AdditionalProfilePlusCreationMutation',
-		 'x-fb-lsd': 'ZM7FAk6cuRcUp3imwqvHTY',
-		 'viewport-width': '1366',}
-	datas = {
-			'fb_dtsg': fb_dtsgFB,
-			'variables': '{"input":{"attribution_id_v2":"ProfileCometTimelineListViewRoot.react,comet.profile.timeline.list,unexpected,1687253370139,81087,190055527696468,","cover_photo_id":"'+BoThuan+'","focus":{"x":0.5,"y":0.4997464503042596},"target_user_id":"'+idpro5+'","actor_id":"'+idpro5+'","client_mutation_id":"3"},"scale":1,"contextualProfileContext":null}',
-			'server_timestamps': 'true',
-			'doc_id': '6099517113440760',
+	fheaders= {'authority': 'www.facebook.com','accept': '*/*','accept-language': 'vi-VN,vi;q=0.9,fr-FR;q=0.8,fr;q=0.7,en-US;q=0.6,en;q=0.5','cookie': cookiesFB,'origin': 'https://www.facebook.com','sec-ch-prefers-color-scheme': 'dark','sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"','sec-ch-ua-mobile': '?0','sec-ch-ua-platform': '"Windows"','sec-fetch-dest': 'empty','sec-fetch-mode': 'cors','sec-fetch-site': 'same-origin','viewport-width': '979','x-fb-friendly-name': 'AdditionalProfilePlusCreationMutation','x-fb-lsd': 'ZM7FAk6cuRcUp3imwqvHTY','viewport-width': '1366',}
+	datas = {'fb_dtsg': fb_dtsgFB,'variables': '{"input":{"attribution_id_v2":"ProfileCometTimelineListViewRoot.react,comet.profile.timeline.list,unexpected,1687253370139,81087,190055527696468,","cover_photo_id":"'+BoThuan+'","focus":{"x":0.5,"y":0.4997464503042596},"target_user_id":"'+idpro5+'","actor_id":"'+idpro5+'","client_mutation_id":"3"},"scale":1,"contextualProfileContext":null}','server_timestamps': 'true','doc_id': '6099517113440760',
 	}
 	response = requests.post('https://www.facebook.com/api/graphql/', headers=fheaders, data=datas, proxies=proxies, timeout=20)
-	print(f"  ╰─> Cover DONE         ")
+	print(f"  ╰─> Cover DONE           ",end='\r')
