@@ -4,8 +4,33 @@ import re,requests,os,sys,json,colorama,random
 import uuid
 from threading import Thread
 def GetPro5(x,proxy,stt):
-	while True:
-		print(F'Phát Hiện Can Thiệp FILE')
+	try:
+		headers = {'authority': 'www.facebook.com','accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9','accept-language': 'vi','cookie': x,'sec-ch-prefers-color-scheme': 'light','sec-ch-ua': '"Chromium";v="106", "Google Chrome";v="106", "Not;A=Brand";v="99"','sec-ch-ua-mobile': '?0','sec-ch-ua-platform': '"Windows"','sec-fetch-dest': 'document','sec-fetch-mode': 'navigate','sec-fetch-site': 'none','sec-fetch-user': '?1','upgrade-insecure-requests': '1','viewport-width': '1366',}
+		if len(str(proxy)) >= 6 :
+			if proxy.count(":") == 3:
+				pr = proxy.split(":")
+				pr = "%s:%s@%s:%s"%(pr[2], pr[3], pr[0], pr[1])
+			else:pr = proxy
+			choose = "http"
+			proxies = {"http": f"{choose}://{pr}" ,"https": f"{choose}://{pr}"}
+		headers = {'authority': 'www.facebook.com','accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9','accept-language': 'vi,en;q=0.9,vi-VN;q=0.8,fr-FR;q=0.7,fr;q=0.6,en-US;q=0.5','cache-control': 'max-age=0','cookie': x,'origin': 'https://www.facebook.com','referer': 'https://www.facebook.com','sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"','sec-ch-ua-mobile': '?0','sec-ch-ua-platform': '"Windows"','sec-fetch-dest': 'document','sec-fetch-mode': 'navigate','sec-fetch-site': 'none','sec-fetch-user': '?1','upgrade-insecure-requests': '1','user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',}
+		url_profile = requests.get('https://www.facebook.com/me', headers=headers, proxies=proxies, timeout=20).url
+		profile = requests.get(url_profile, headers=headers, proxies=proxies, timeout=20).text
+		try:fb_dtsg = profile.split('{"name":"fb_dtsg","value":"')[1].split('"},')[0]
+		except:fb_dtsg = profile.split(',"f":"')[1].split('","l":null}')[0]
+		uid=x.split("c_user=")[1].split(';')[0]
+		headers = {'authority': 'www.facebook.com','accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9','accept-language': 'vi,en;q=0.9,vi-VN;q=0.8,fr-FR;q=0.7,fr;q=0.6,en-US;q=0.5','cache-control': 'max-age=0','cookie': x,'origin': 'https://www.facebook.com','referer': 'https://www.facebook.com','sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"','sec-ch-ua-mobile': '?0','sec-ch-ua-platform': '"Windows"','sec-fetch-dest': 'document','sec-fetch-mode': 'navigate','sec-fetch-site': 'none','sec-fetch-user': '?1','upgrade-insecure-requests': '1',}
+		idpef = requests.post('https://www.facebook.com/api/graphql/', headers=headers, data={'fb_dtsg': fb_dtsg,'variables': '{"showUpdatedLaunchpointRedesign":true,"useAdminedPagesForActingAccount":false,"useNewPagesYouManage":true}','doc_id': '5300338636681652'}, proxies=proxies, timeout=10).json()
+		a = idpef['data']['viewer']['actor']['profile_switcher_eligible_profiles']['nodes']
+		listcoolkie=[]
+		print(f"[{stt}] > Gét Được : {len(a)}  ",end=' ')
+		for b in a:
+			uid = b['profile']['id']
+			listcoolkie.append(f'{x};i_user={uid};|{fb_dtsg}|{proxy}')
+			print(uid,end=' ')
+		print("")
+		return listcoolkie
+	except:return []
 def Lấy_Thông_Tin(proxy,TK,MK,Hai2fa,Số):
 	type=0
 	if proxy.count(":") == 3:
