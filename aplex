@@ -1,11 +1,12 @@
 
+
+
 from pystyle import Add, Center, Anime, Colors, Colorate, Write, System
 from time import sleep
 import re,requests,os,sys,json,colorama,random
 import uuid
 from threading import Thread
 def CheckCK(proxy,x):
-
 	try:
 		headers = {'authority': 'www.facebook.com','accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9','accept-language': 'vi','cookie': x,'sec-ch-prefers-color-scheme': 'light','sec-ch-ua': '"Chromium";v="106", "Google Chrome";v="106", "Not;A=Brand";v="99"','sec-ch-ua-mobile': '?0','sec-ch-ua-platform': '"Windows"','sec-fetch-dest': 'document','sec-fetch-mode': 'navigate','sec-fetch-site': 'none','sec-fetch-user': '?1','upgrade-insecure-requests': '1','viewport-width': '1366',}
 		if proxy.count(":") == 3:
@@ -23,7 +24,6 @@ def CheckCK(proxy,x):
 	except:
 		return False
 def GetPro5(x,proxy,stt):
-
 	try:
 		headers = {'authority': 'www.facebook.com','accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9','accept-language': 'vi','cookie': x,'sec-ch-prefers-color-scheme': 'light','sec-ch-ua': '"Chromium";v="106", "Google Chrome";v="106", "Not;A=Brand";v="99"','sec-ch-ua-mobile': '?0','sec-ch-ua-platform': '"Windows"','sec-fetch-dest': 'document','sec-fetch-mode': 'navigate','sec-fetch-site': 'none','sec-fetch-user': '?1','upgrade-insecure-requests': '1','viewport-width': '1366',}
 		if len(str(proxy)) >= 6 :
@@ -178,7 +178,6 @@ def Lấy_Thông_Tin(proxy,TK,MK,Hai2fa,Số):
 		except:
 			return False
 def LoginFB():
-
 	DauVao=[]
 	BoMayCheckDuoc=open('Dữ_Liệu_Vào.txt').readlines()
 	for XoaXuongDong in BoMayCheckDuoc:
@@ -187,8 +186,10 @@ def LoginFB():
 	MK=DauVao[0].split("|")[1]
 	KeyAPI=DauVao[0].split("|")[2]
 	Delays=DauVao[0].split("|")[3]
+	UpAVATA_Bìa=DauVao[0].split("|")[4]
+	Tự_Thêm_Cấu_Hình=DauVao[0].split("|")[5]
 	DauVao.remove(DauVao[0])
-	return TK,MK,KeyAPI,DauVao,int(Delays)
+	return TK,MK,KeyAPI,DauVao,int(Delays),UpAVATA_Bìa,Tự_Thêm_Cấu_Hình
 def Đăng_Nhập_TTC(TK,MK):
 	a=requests.post('https://tuongtaccheo.com/login.php',headers={'content-type': 'application/x-www-form-urlencoded'},data={'username': TK,'password': MK,'submit': 'ĐĂNG NHẬP'},allow_redirects=False).cookies
 	cookie='PHPSESSID='+a['PHPSESSID']
@@ -220,25 +221,31 @@ def Delay(x,t):
 	for i in range(x,-1,-1):
 		print(f'{t} : {i}s         ',end='\r')
 		sleep(1)
-def ThemCauHinhTTC(UID,ckttc,KeyCap,cookiesFB,fb_dtsgFB,proxy):
+def ThemCauHinhTTC(UID,ckttc,KeyCap,cookiesFB,fb_dtsgFB,proxy,UpAVATA_Bìa):
 	tien=requests.get(f"https://api.1stcaptcha.com/user/balance?apikey={KeyCap}")
 	c=int(float(tien.json()['Balance'])/0.00055)
 	a=tien.json()['Balance']
 	print(f"[T]>> Có : {a}$  ==> {c} Lượt")
-	UpBìa(cookiesFB,fb_dtsgFB,proxy)
+	if UpAVATA_Bìa == 'TRUE':
+		UpBìa(cookiesFB,fb_dtsgFB,proxy)
 	print(f'Giải Captchat !!',end='\r')
 	Giaicapcha=requests.get(f'https://api.1stcaptcha.com/recaptchav2?apikey={KeyCap}&sitekey=6Lcp7hcUAAAAAJafojnrzQU-DliPkgIiNSGFnVej&siteurl=https://tuongtaccheo.com/&invisible=false').json()
 	idy=Giaicapcha['TaskId']
+	Số_Lần_Chờ_Đợi=0 
 	while True:
-		try:
-			token=requests.get(f'https://api.1stcaptcha.com/getresult?apikey={KeyCap}&taskid={idy}').json()
-			token=token['Data']['Token']
-			break
-		except:
-			print(f'[T]> Chưa Có Lời Giải!!',end='\r')
-			sleep(1)
-			print('                              ',end='\r')
-			Delay(5,'Giải Captchat')
+			try:
+				token=requests.get(f'https://api.1stcaptcha.com/getresult?apikey={KeyCap}&taskid={idy}').json()
+				token=token['Data']['Token']
+				break
+			except:
+				Số_Lần_Chờ_Đợi+=1
+				if Số_Lần_Chờ_Đợi >= 12:
+					Giaicapcha=requests.get(f'https://api.1stcaptcha.com/recaptchav2?apikey={KeyCap}&sitekey=6Lcp7hcUAAAAAJafojnrzQU-DliPkgIiNSGFnVej&siteurl=https://tuongtaccheo.com/&invisible=false').json()
+					idy=Giaicapcha['TaskId']
+				print(f'[T]> Chưa Có Lời Giải!!',end='\r')
+				sleep(1)
+				print('                              ',end='\r')
+				Delay(5,'Giải Captchat')
 	head ={'Host':'tuongtaccheo.com','accept':'*/*','user-agent':'Mozilla/5.0 (Linux; Android 8.1.0; CPH1912 Build/O11019) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/107.0.5304.91 Mobile Safari/537.36','content-type':'application/x-www-form-urlencoded; charset=UTF-8','cookie':f'{ckttc}'}
 	data={'link': UID,'loainick': 'fb','recaptcha': token}
 	r=requests.post("https://tuongtaccheo.com/cauhinh/nhapnick.php",headers=head,data=data).text
