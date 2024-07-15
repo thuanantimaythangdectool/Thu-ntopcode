@@ -287,6 +287,7 @@ class Ui_Reghotmail(object):
         self.comboBox.setItemText(0, _translate("Reghotmail", "https://rockcaptcha.com/"))
         self.comboBox.setItemText(1, _translate("Reghotmail", "https://rockcaptcha.com/"))
         self.comboBox.setItemText(2, _translate("Reghotmail", "https://rockcaptcha.com/"))
+        self.tableWidget.setColumnWidth(3, 300)
 
 
 if __name__ == "__main__":
