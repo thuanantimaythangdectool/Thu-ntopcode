@@ -234,6 +234,7 @@ class Ui_Reghotmail(object):
             return False
         driver.quit()
     def Batdau(self):
+        self.LUONGCGA = True
         def Run4():
             self.LUONGCGA = True
             for i in range(int(self.spinBox.value())):
