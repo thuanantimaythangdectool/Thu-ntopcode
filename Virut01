@@ -100,7 +100,7 @@ class Ui_Reghotmail(object):
         self.pushButton.clicked.connect(self.Batdau)
         self.pushButton_2.clicked.connect(self.Dung)
 
-        self.LUONGCGA = True
+        
         self.retranslateUi(Reghotmail)
         QtCore.QMetaObject.connectSlotsByName(Reghotmail)
     def Dung(self):
@@ -235,6 +235,7 @@ class Ui_Reghotmail(object):
         driver.quit()
     def Batdau(self):
         def Run4():
+            self.LUONGCGA = True
             for i in range(int(self.spinBox.value())):
                 self.trunggian1=i
                 def Run5():
