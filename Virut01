@@ -107,7 +107,6 @@ class Ui_Reghotmail(object):
         print("dừng")
         self.LUONGCGA = False
     def Reg(self,NAME,stt,dong):
-        import tkinter as tk
         xx=stt*400
         yy=0
         if xx >= 1600 and xx < 3200: 
