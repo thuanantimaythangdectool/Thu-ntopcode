@@ -98,12 +98,13 @@ class Ui_Reghotmail(object):
         self.statusbar.setObjectName("statusbar")
         Reghotmail.setStatusBar(self.statusbar)
         self.pushButton.clicked.connect(self.Batdau)
-        self.pushButton_4.clicked.connect(self.Dung)
+        self.pushButton_2.clicked.connect(self.Dung)
 
         self.LUONGCGA = True
         self.retranslateUi(Reghotmail)
         QtCore.QMetaObject.connectSlotsByName(Reghotmail)
     def Dung(self):
+        print("dừng")
         self.LUONGCGA = False
     def Reg(self,NAME,stt,dong):
         xx=stt*400
