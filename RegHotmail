@@ -215,7 +215,7 @@ class Ui_Reghotmail(object):
         # Chờ đợi đến khi phần tử Password xuất hiện
         self.tableWidget.setItem(dong, 3, QtWidgets.QTableWidgetItem(f"Nhập mật Khẩu"))
 
-        WebWait(driver, 100).until(EC.presence_of_element_located((By.ID, "Password")))
+        WebWait(driver, 10).until(EC.presence_of_element_located((By.ID, "Password")))
         print('Điền Pass')
         driver.find_element(By.ID, "Password").send_keys(MK)
         driver.find_element(By.ID, "nextButton").click()
