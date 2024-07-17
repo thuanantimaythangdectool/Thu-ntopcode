@@ -298,64 +298,66 @@ class Ui_Reghotmail(object):
                         def Run5():
                             i=self.trunggian1
                             while self.LUONGCGA :
-                                if int(self.spinBox_2.value()) > 0:
-                                    if int(self.spinBox_2.value()) <= self.thanhcong:self.LUONGCGA = False
-                                self.sothutu+=1
-                                NAME=requests.get("https://story-shack-cdn-v2.glitch.me/generators/vietnamese-name-generator/male?count=2").json()['data'][0]['name']
-                                row_number = self.tableWidget.rowCount()
-                                self.tableWidget.insertRow(row_number)
-                                KEY_API=self.lineEdit_2.text()
-                                ACC=self.Reg(NAME,self.sothutu,self.sothutu,KEY_API,self.listIDchrome[self.sothutu])
-                                if ACC != False:
-                                    TK=ACC.split("|")[0]
-                                    MK=ACC.split("|")[1]
-                                    import openpyxl
-                                    from openpyxl.utils import get_column_letter
-                                    from openpyxl import load_workbook
+                                try:
+                                    if int(self.spinBox_2.value()) > 0:
+                                        if int(self.spinBox_2.value()) <= self.thanhcong:self.LUONGCGA = False
+                                    self.sothutu+=1
+                                    NAME=requests.get("https://story-shack-cdn-v2.glitch.me/generators/vietnamese-name-generator/male?count=2").json()['data'][0]['name']
+                                    row_number = self.tableWidget.rowCount()
+                                    self.tableWidget.insertRow(row_number)
+                                    KEY_API=self.lineEdit_2.text()
+                                    ACC=self.Reg(NAME,self.sothutu,self.sothutu,KEY_API,self.listIDchrome[self.sothutu])
+                                    if ACC != False:
+                                        TK=ACC.split("|")[0]
+                                        MK=ACC.split("|")[1]
+                                        import openpyxl
+                                        from openpyxl.utils import get_column_letter
+                                        from openpyxl import load_workbook
 
-                                    def create_excel_file(filename):
-                                        # Tạo một Workbook mới
-                                        wb = openpyxl.Workbook()
+                                        def create_excel_file(filename):
+                                            # Tạo một Workbook mới
+                                            wb = openpyxl.Workbook()
 
-                                        # Chọn sheet đầu tiên và đặt tên cho sheet
-                                        sheet = wb.active
-                                        sheet.title = 'Tài khoản'
+                                            # Chọn sheet đầu tiên và đặt tên cho sheet
+                                            sheet = wb.active
+                                            sheet.title = 'Tài khoản'
 
-                                        # Đặt tên cho các cột
-                                        sheet['A1'] = 'Mail'
-                                        sheet['B1'] = 'Pass'
+                                            # Đặt tên cho các cột
+                                            sheet['A1'] = 'Mail'
+                                            sheet['B1'] = 'Pass'
 
-                                        # Lưu Workbook xuống file Excel
-                                        wb.save(filename)
-                                        print(f"Đã tạo file Excel mới: {filename}")
+                                            # Lưu Workbook xuống file Excel
+                                            wb.save(filename)
+                                            print(f"Đã tạo file Excel mới: {filename}")
 
-                                    def add_account_to_excel(filename, mail, password):
-                                        # Mở Workbook từ file Excel đã tồn tại với chế độ chỉnh sửa
-                                        try:
-                                            wb = load_workbook(filename)
-                                        except FileNotFoundError:
-                                            create_excel_file(filename)
-                                            wb = load_workbook(filename)
-                                            
-                                        sheet = wb.active
+                                        def add_account_to_excel(filename, mail, password):
+                                            # Mở Workbook từ file Excel đã tồn tại với chế độ chỉnh sửa
+                                            try:
+                                                wb = load_workbook(filename)
+                                            except FileNotFoundError:
+                                                create_excel_file(filename)
+                                                wb = load_workbook(filename)
+                                                
+                                            sheet = wb.active
 
-                                        # Tìm dòng cuối cùng có dữ liệu để thêm tài khoản mới vào
-                                        max_row = sheet.max_row
-                                        new_row = max_row + 1
+                                            # Tìm dòng cuối cùng có dữ liệu để thêm tài khoản mới vào
+                                            max_row = sheet.max_row
+                                            new_row = max_row + 1
 
-                                        # Ghi tài khoản mới vào file Excel
-                                        sheet.cell(row=new_row, column=1).value = mail
-                                        sheet.cell(row=new_row, column=2).value = password
+                                            # Ghi tài khoản mới vào file Excel
+                                            sheet.cell(row=new_row, column=1).value = mail
+                                            sheet.cell(row=new_row, column=2).value = password
 
-                                        # Lưu lại vào file Excel
-                                        wb.save(filename)
-                                        print(f"Đã thêm tài khoản mới vào file Excel: {mail}, {password}")
+                                            # Lưu lại vào file Excel
+                                            wb.save(filename)
+                                            print(f"Đã thêm tài khoản mới vào file Excel: {mail}, {password}")
 
-                                    # Tên file Excel để lưu dữ liệu
-                                    excel_file = 'accounts.xlsx'
+                                        # Tên file Excel để lưu dữ liệu
+                                        excel_file = 'accounts.xlsx'
 
-                                    # Thêm tài khoản mới vào file Excel
-                                    add_account_to_excel(excel_file, TK, MK)
+                                        # Thêm tài khoản mới vào file Excel
+                                        add_account_to_excel(excel_file, TK, MK)
+                                except:pass
                         Thread(target=Run5).start()
 
 
