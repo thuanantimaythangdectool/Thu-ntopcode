@@ -294,42 +294,50 @@ class Ui_MainWindow(object):
 		def BoiDen(driver,x):
 			WebWait(driver, 100).until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
 			def Boi(driver):
-				solanloi=0
-				while solanloi <= 50:
-					try:
-						script = """
-						var selection = window.getSelection();
-						var tags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
-						var elements = Array.from(document.querySelectorAll(tags.join(',')))
-							.filter(element => {
-								if (typeof element.getBoundingClientRect !== 'function') {
-									return false;
-								}
-								var rect = element.getBoundingClientRect();
-								return rect.top >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
-									&& element.textContent.trim().length > 50;
-							});
-						if (elements.length > 0) {
-							var element = elements[Math.floor(Math.random() * elements.length)];
-							var text = element.textContent.trim();
-							var range = document.createRange();
-							var startOffset = Math.floor(Math.random() * (text.length * 0.6));
-							var endOffset = startOffset + Math.floor(text.length * (Math.random() * 0.2 + 0.4));
-							range.setStart(element.firstChild, startOffset);
-							range.setEnd(element.firstChild, endOffset);
-							selection.removeAllRanges();
-							selection.addRange(range);
-							return text.substring(startOffset, endOffset);
-						}
-						return '';
-							"""
-						return driver.execute_script(script)
-						break
-					except:
-						solanloi+=1
-				return 'False'
+				script = """
+				var tags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+				var elements = Array.from(document.querySelectorAll(tags.join(',')))
+				    .filter(element => {
+				        if (typeof element.getBoundingClientRect !== 'function') {
+				            return false;
+				        }
+				        var rect = element.getBoundingClientRect();
+				        return rect.top >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
+				            && element.textContent.trim().length > 50;
+				    });
+
+				if (elements.length > 0) {
+				    var element = elements[Math.floor(Math.random() * elements.length)];
+				    var text = element.textContent.trim();
+				    var words = text.split(' ');
+				    var startWordIndex = Math.floor(Math.random() * (words.length * 0.6));
+				    var endWordIndex = startWordIndex + Math.floor(words.length * (Math.random() * 0.2 + 0.4));
+				    var startOffset = words.slice(0, startWordIndex).join(' ').length;
+				    var endOffset = words.slice(0, endWordIndex).join(' ').length;
+
+				    // Adjust offsets to account for spaces
+				    if (startOffset > 0) startOffset += 1;
+				    if (endOffset > 0) endOffset += 1;
+
+				   
+				   
+				    return text.substring(startOffset, endOffset);
+				}
+				return '';
+
+
+				        """
+				while True:
+				    concu=driver.execute_script(script)
+				    if len(concu) > 5:break
+				print('Text:',concu)
+
+				elements = driver.find_elements(By.XPATH, "//*[contains(text(), '"+concu+"')]")
+				for element in elements:
+				    driver.execute_script("arguments[0].style.backgroundColor = 'royalblue'; arguments[0].style.color = 'white';", element)
+				return concu
 			Texttboiden=Boi(driver)
-			self.tableWidget.setItem(x, 2, QtWidgets.QTableWidgetItem(f"Đã Bôi Đen {Texttboiden}!"))
+			self.tableWidget.setItem(x, 2, QtWidgets.QTableWidgetItem(f"Bôi Đen {Texttboiden}..!"))
 			print("Đã Bôi Đen:", Texttboiden)
 			time.sleep(5)
 			self.DELAY(x)
