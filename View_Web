@@ -1,0 +1,517 @@
+from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox
+from PyQt6 import QtCore, QtGui, QtWidgets
+from threading import Thread
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait as WebWait
+from selenium.webdriver.support import expected_conditions as EC
+import time, requests, json ,string ,random,os
+class Ui_MainWindow(object):
+	def setupUi(self, MainWindow):
+		MainWindow.setObjectName("MainWindow")
+		MainWindow.resize(1200, 350)
+		MainWindow.setMinimumSize(QtCore.QSize(1200, 350))
+		MainWindow.setMaximumSize(QtCore.QSize(1200, 350))
+		self.centralwidget = QtWidgets.QWidget(parent=MainWindow)
+		self.centralwidget.setObjectName("centralwidget")
+		self.tableWidget = QtWidgets.QTableWidget(parent=self.centralwidget)
+		self.tableWidget.setGeometry(QtCore.QRect(10, 10, 501, 281))
+		self.tableWidget.setObjectName("tableWidget")
+		self.tableWidget.setColumnCount(3)
+		self.tableWidget.setRowCount(0)
+		item = QtWidgets.QTableWidgetItem()
+		self.tableWidget.setHorizontalHeaderItem(0, item)
+		item = QtWidgets.QTableWidgetItem()
+		self.tableWidget.setHorizontalHeaderItem(1, item)
+		item = QtWidgets.QTableWidgetItem()
+		self.tableWidget.setHorizontalHeaderItem(2, item)
+		self.groupBox = QtWidgets.QGroupBox(parent=self.centralwidget)
+		self.groupBox.setGeometry(QtCore.QRect(530, 260, 591, 61))
+		self.groupBox.setObjectName("groupBox")
+		self.pushButton = QtWidgets.QPushButton(parent=self.groupBox)
+		self.pushButton.setGeometry(QtCore.QRect(10, 20, 61, 23))
+		self.pushButton.setObjectName("pushButton")
+		self.pushButton_2 = QtWidgets.QPushButton(parent=self.groupBox)
+		self.pushButton_2.setGeometry(QtCore.QRect(80, 20, 61, 23))
+		self.pushButton_2.setObjectName("pushButton_2")
+		self.label_5 = QtWidgets.QLabel(parent=self.groupBox)
+		self.label_5.setGeometry(QtCore.QRect(160, 20, 61, 16))
+		self.label_5.setObjectName("label_5")
+		self.spinBox_3 = QtWidgets.QSpinBox(parent=self.groupBox)
+		self.spinBox_3.setGeometry(QtCore.QRect(240, 20, 42, 22))
+		self.spinBox_3.setMinimum(1)
+		self.spinBox_3.setObjectName("spinBox_3")
+		self.groupBox_2 = QtWidgets.QGroupBox(parent=self.centralwidget)
+		self.groupBox_2.setGeometry(QtCore.QRect(530, 30, 601, 221))
+		self.groupBox_2.setObjectName("groupBox_2")
+		self.checkBox = QtWidgets.QCheckBox(parent=self.groupBox_2)
+		self.checkBox.setGeometry(QtCore.QRect(10, 70, 161, 17))
+		self.checkBox.setObjectName("checkBox")
+		self.checkBox_2 = QtWidgets.QCheckBox(parent=self.groupBox_2)
+		self.checkBox_2.setGeometry(QtCore.QRect(10, 90, 151, 17))
+		self.checkBox_2.setObjectName("checkBox_2")
+		self.checkBox_3 = QtWidgets.QCheckBox(parent=self.groupBox_2)
+		self.checkBox_3.setGeometry(QtCore.QRect(10, 110, 161, 17))
+		self.checkBox_3.setObjectName("checkBox_3")
+		self.checkBox_4 = QtWidgets.QCheckBox(parent=self.groupBox_2)
+		self.checkBox_4.setGeometry(QtCore.QRect(10, 130, 171, 17))
+		self.checkBox_4.setObjectName("checkBox_4")
+		self.label = QtWidgets.QLabel(parent=self.groupBox_2)
+		self.label.setGeometry(QtCore.QRect(10, 160, 301, 16))
+		self.label.setObjectName("label")
+		self.spinBox = QtWidgets.QSpinBox(parent=self.groupBox_2)
+		self.spinBox.setGeometry(QtCore.QRect(40, 180, 42, 22))
+		self.spinBox.setMinimum(5)
+		self.spinBox.setObjectName("spinBox")
+		self.spinBox_2 = QtWidgets.QSpinBox(parent=self.groupBox_2)
+		self.spinBox_2.setGeometry(QtCore.QRect(190, 180, 42, 22))
+		self.spinBox_2.setMinimum(10)
+		self.spinBox_2.setObjectName("spinBox_2")
+		self.label_2 = QtWidgets.QLabel(parent=self.groupBox_2)
+		self.label_2.setGeometry(QtCore.QRect(10, 180, 21, 16))
+		self.label_2.setObjectName("label_2")
+		self.label_3 = QtWidgets.QLabel(parent=self.groupBox_2)
+		self.label_3.setGeometry(QtCore.QRect(130, 180, 21, 16))
+		self.label_3.setObjectName("label_3")
+		self.comboBox = QtWidgets.QComboBox(parent=self.groupBox_2)
+		self.comboBox.setGeometry(QtCore.QRect(90, 20, 71, 22))
+		self.comboBox.setObjectName("comboBox")
+		self.comboBox.addItem("")
+		self.comboBox.addItem("")
+		self.comboBox.addItem("")
+		self.label_4 = QtWidgets.QLabel(parent=self.groupBox_2)
+		self.label_4.setGeometry(QtCore.QRect(210, 20, 21, 16))
+		self.label_4.setObjectName("label_4")
+		self.label_6 = QtWidgets.QLabel(parent=self.groupBox_2)
+		self.label_6.setGeometry(QtCore.QRect(330, 20, 21, 20))
+		self.label_6.setObjectName("label_6")
+		self.lineEdit = QtWidgets.QLineEdit(parent=self.groupBox_2)
+		self.lineEdit.setGeometry(QtCore.QRect(230, 20, 71, 20))
+		self.lineEdit.setObjectName("lineEdit")
+		self.lineEdit_2 = QtWidgets.QLineEdit(parent=self.groupBox_2)
+		self.lineEdit_2.setGeometry(QtCore.QRect(350, 20, 71, 20))
+		self.lineEdit_2.setObjectName("lineEdit_2")
+		self.label_7 = QtWidgets.QLabel(parent=self.groupBox_2)
+		self.label_7.setGeometry(QtCore.QRect(20, 20, 81, 20))
+		self.label_7.setObjectName("label_7")
+		self.groupBox_3 = QtWidgets.QGroupBox(parent=self.groupBox_2)
+		self.groupBox_3.setGeometry(QtCore.QRect(170, 50, 191, 111))
+		self.groupBox_3.setObjectName("groupBox_3")
+		self.spinBox_5 = QtWidgets.QSpinBox(parent=self.groupBox_3)
+		self.spinBox_5.setGeometry(QtCore.QRect(110, 20, 42, 22))
+		self.spinBox_5.setMinimum(1)
+		self.spinBox_5.setObjectName("spinBox_5")
+		self.spinBox_7 = QtWidgets.QSpinBox(parent=self.groupBox_3)
+		self.spinBox_7.setGeometry(QtCore.QRect(110, 40, 42, 22))
+		self.spinBox_7.setMinimum(1)
+		self.spinBox_7.setObjectName("spinBox_7")
+		self.spinBox_9 = QtWidgets.QSpinBox(parent=self.groupBox_3)
+		self.spinBox_9.setGeometry(QtCore.QRect(110, 60, 42, 22))
+		self.spinBox_9.setMinimum(1)
+		self.spinBox_9.setObjectName("spinBox_9")
+		self.spinBox_11 = QtWidgets.QSpinBox(parent=self.groupBox_3)
+		self.spinBox_11.setGeometry(QtCore.QRect(110, 80, 42, 22))
+		self.spinBox_11.setMinimum(1)
+		self.spinBox_11.setObjectName("spinBox_11")
+		self.spinBox_4 = QtWidgets.QSpinBox(parent=self.groupBox_3)
+		self.spinBox_4.setGeometry(QtCore.QRect(10, 20, 42, 22))
+		self.spinBox_4.setMinimum(1)
+		self.spinBox_4.setObjectName("spinBox_4")
+		self.spinBox_6 = QtWidgets.QSpinBox(parent=self.groupBox_3)
+		self.spinBox_6.setGeometry(QtCore.QRect(10, 40, 42, 22))
+		self.spinBox_6.setMinimum(1)
+		self.spinBox_6.setObjectName("spinBox_6")
+		self.spinBox_8 = QtWidgets.QSpinBox(parent=self.groupBox_3)
+		self.spinBox_8.setGeometry(QtCore.QRect(10, 60, 42, 22))
+		self.spinBox_8.setMinimum(1)
+		self.spinBox_8.setObjectName("spinBox_8")
+		self.spinBox_10 = QtWidgets.QSpinBox(parent=self.groupBox_3)
+		self.spinBox_10.setGeometry(QtCore.QRect(10, 80, 42, 22))
+		self.spinBox_10.setMinimum(1)
+		self.spinBox_10.setObjectName("spinBox_10")
+		self.checkBox_5 = QtWidgets.QCheckBox(parent=self.groupBox_2)
+		self.checkBox_5.setGeometry(QtCore.QRect(380, 70, 121, 17))
+		self.checkBox_5.setObjectName("checkBox_5")
+		self.pushButton_5 = QtWidgets.QPushButton(parent=self.groupBox_2)
+		self.pushButton_5.setGeometry(QtCore.QRect(480, 70, 51, 23))
+		self.pushButton_5.setObjectName("pushButton_5")
+		self.label_8 = QtWidgets.QLabel(parent=self.groupBox_2)
+		self.label_8.setGeometry(QtCore.QRect(380, 90, 101, 16))
+		self.label_8.setObjectName("label_8")
+		self.lineEdit_3 = QtWidgets.QLineEdit(parent=self.groupBox_2)
+		self.lineEdit_3.setGeometry(QtCore.QRect(380, 110, 191, 20))
+		self.lineEdit_3.setObjectName("lineEdit_3")
+		self.lineEdit_4 = QtWidgets.QLineEdit(parent=self.groupBox_2)
+		self.lineEdit_4.setGeometry(QtCore.QRect(380, 150, 191, 20))
+		self.lineEdit_4.setObjectName("lineEdit_4")
+		self.label_9 = QtWidgets.QLabel(parent=self.groupBox_2)
+		self.label_9.setGeometry(QtCore.QRect(380, 130, 101, 16))
+		self.label_9.setObjectName("label_9")
+		self.pushButton_6 = QtWidgets.QPushButton(parent=self.groupBox_2)
+		self.pushButton_6.setGeometry(QtCore.QRect(380, 170, 51, 23))
+		self.pushButton_6.setObjectName("pushButton_6")
+		self.pushButton_3 = QtWidgets.QPushButton(parent=self.groupBox)
+		self.pushButton_3.setGeometry(QtCore.QRect(330, 20, 75, 23))
+		self.pushButton_3.setObjectName("pushButton_3")
+		MainWindow.setCentralWidget(self.centralwidget)
+
+		self.pushButton.clicked.connect(self.Batdau)
+		self.pushButton_2.clicked.connect(self.dung)
+		self.pushButton_3.clicked.connect(self.file)
+
+
+		self.pushButton_5.clicked.connect(self.filel2)
+		self.pushButton_6.clicked.connect(self.fileloadgr)
+
+		self.fileload()
+
+
+		self.retranslateUi(MainWindow)
+		QtCore.QMetaObject.connectSlotsByName(MainWindow)
+	def dung(self):
+		self.run=False
+		print("Chạy Nốt Cái Dở Xong Ngư Không Chạy Tiếp [Đã Nhận Đc lệnh]")
+	def file(self):
+		file_path = 'data.txt'
+		if not os.path.exists(file_path):
+			with open(file_path, 'w', encoding='utf-8') as file:
+				file.write("")
+		os.startfile(file_path)
+	def filel2(self):
+		file_path = 'data2.txt'
+		if not os.path.exists(file_path):
+			with open(file_path, 'w', encoding='utf-8') as file:
+				file.write("")
+		os.startfile(file_path)
+	def fileload(self):
+		pass
+	def fileloadgr(self):
+		self.tableWidget.setRowCount(0)
+		self.listIDchrome=[]
+		a_c=requests.get("http://127.0.0.1:19995/api/v3/profiles").json()
+		thuan=-1
+		for x in a_c['data']:
+			if x['group_id'] == int(self.lineEdit_4.text()):
+				thuan+=1
+				row_number = self.tableWidget.rowCount()
+				self.tableWidget.insertRow(row_number)
+				self.listIDchrome.append(x['id'])
+				lon_cho=str(x['id'])
+				self.tableWidget.setItem(thuan, 0, QtWidgets.QTableWidgetItem(f"{lon_cho}"))
+
+		
+	def randomDelay(self):
+		return random.randint(self.spinBox.value(), self.spinBox_2.value())
+	def DELAY(self,x):
+		for delay in range(self.randomDelay(),-1,-1):
+			self.tableWidget.setItem(x, 2, QtWidgets.QTableWidgetItem(f"Chờ Hành Động [{delay}s]"))
+			time.sleep(1)
+	def Chrome(self,link,x,ID):
+		stt=x
+		if (x/16)==0:stt=0
+		xx=stt*1700
+		yy=0
+		if xx >= 6800 and xx < 13600: 
+			yy=1200
+			xx=(stt-4)*1700
+		if xx >= 13600 and xx < 27200:
+			yy=2400
+			xx=(stt-8)*1700
+		if xx >= 27200 and xx < 54400:
+			yy=3600
+			xx=(stt-12)*1700
+		if xx >= 54400 and xx < 108800:
+			yy=4800
+			xx=(stt-16)*1700
+		
+		self.tableWidget.setItem(x, 2, QtWidgets.QTableWidgetItem(f"Tạo Profile GPM!"))
+		self.tableWidget.setItem(x, 0, QtWidgets.QTableWidgetItem(f"Setup GPM!"))
+		time.sleep(1)
+
+		
+
+		options = webdriver.ChromeOptions()
+		prefs = {
+			"credentials_enable_service": False,
+			"profile.password_manager_enabled": False
+		}
+		self.tableWidget.setItem(x, 2, QtWidgets.QTableWidgetItem(f"Điều Khiển Profile GPM!"))
+
+		noiluu=self.lineEdit_3.text().replace('\\', '\\\\')
+		print(noiluu)
+		profile_path = noiluu+"\\"+ID
+		print(profile_path)
+		options.add_argument(f"user-data-dir={profile_path}")
+		options.add_experimental_option("prefs", prefs)
+		options.add_argument("--disable-blink-features=AutomationControlled")
+		options.add_experimental_option("excludeSwitches", ["enable-automation"])
+		options.add_argument(f"window-position={xx},{yy}")
+		options.add_argument("--force-device-scale-factor=0.25")
+		if self.comboBox.currentText() == "Mặc Định":options.add_argument(f"window-size=1700,1200")
+		x1=random.randint(700,1700)
+		x20=random.randint(700,1700)
+		if self.comboBox.currentText() == "Random":options.add_argument(f"window-size={x1},{x20}")
+		if self.comboBox.currentText() == "Tuỳ Chỉnh":options.add_argument(f"window-size={self.lineEdit.text()},{self.lineEdit_2.text()}")
+
+		options.add_argument(f'--app={link}')
+		driver = webdriver.Chrome(options=options)
+		WebWait(driver, 100).until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
+		self.DELAY(x)
+	   
+
+	   
+		def CuonTrang(driver,x):
+			s1=random.randint(800,1200)
+			s2=random.randint(1800,2200)
+			s3=random.randint(2800,3200)
+			s4=random.randint(800,1200)
+			s5=random.randint(400,800)
+			self.tableWidget.setItem(x, 2, QtWidgets.QTableWidgetItem(f"Cuộn Xuống Trang Đọc"))
+			for i in range(0, s1, 50):  # Cuộn mỗi lần 100 pixel
+				driver.execute_script(f"window.scrollTo(0, {i});")
+				time.sleep(0.1)
+			self.DELAY(x)
+			self.tableWidget.setItem(x, 2, QtWidgets.QTableWidgetItem(f"Cuộn Xuống Trang Đọc"))
+			for i in range(s1, s2, 50):  # Cuộn mỗi lần 100 pixel
+				driver.execute_script(f"window.scrollTo(0, {i});")
+				time.sleep(0.01)
+			self.DELAY(x)
+			self.tableWidget.setItem(x, 2, QtWidgets.QTableWidgetItem(f"Cuộn Xuống Trang Đọc"))
+			for i in range(s2, s3, 50):  # Cuộn mỗi lần 100 pixel
+				driver.execute_script(f"window.scrollTo(0, {i});")
+				time.sleep(0.1)
+			self.DELAY(x)
+			self.tableWidget.setItem(x, 2, QtWidgets.QTableWidgetItem(f"Cuộn Lên Trang Đọc"))
+			for i in range(s3, s4, -50):  # Cuộn mỗi lần 100 pixel
+				driver.execute_script(f"window.scrollTo(0, {i});")
+				time.sleep(0.01)
+			for i in range(s4, s5, -50):  # Cuộn mỗi lần 100 pixel
+				driver.execute_script(f"window.scrollTo(0, {i});")
+				time.sleep(0.1)
+		def BoiDen(driver,x):
+			WebWait(driver, 100).until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
+			def Boi(driver):
+				solanloi=0
+				while solanloi <= 50:
+				    try:
+				        script = """
+				        var selection = window.getSelection();
+				        var tags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+				        var elements = Array.from(document.querySelectorAll(tags.join(',')))
+				            .filter(element => {
+				                if (typeof element.getBoundingClientRect !== 'function') {
+				                    return false;
+				                }
+				                var rect = element.getBoundingClientRect();
+				                return rect.top >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
+				                    && element.textContent.trim().length > 50;
+				            });
+				        if (elements.length > 0) {
+				            var element = elements[Math.floor(Math.random() * elements.length)];
+				            var text = element.textContent.trim();
+				            var range = document.createRange();
+				            var startOffset = Math.floor(Math.random() * (text.length * 0.6));
+				            var endOffset = startOffset + Math.floor(text.length * (Math.random() * 0.2 + 0.4));
+				            range.setStart(element.firstChild, startOffset);
+				            range.setEnd(element.firstChild, endOffset);
+				            selection.removeAllRanges();
+				            selection.addRange(range);
+				            return text.substring(startOffset, endOffset);
+				        }
+				        return '';
+				            """
+				        return driver.execute_script(script)
+				        break
+				    except:
+				    	solanloi+=1
+				    	return 'False'
+			Texttboiden=Boi(driver)
+			self.tableWidget.setItem(x, 2, QtWidgets.QTableWidgetItem(f"Đã Bôi Đen {Texttboiden}!"))
+			print("Đã Bôi Đen:", Texttboiden)
+			time.sleep(5)
+			self.DELAY(x)
+		def ChuyenTrang(driver,x,link):
+			def remove_trailing_slash(s):
+				if s.endswith('/'):
+					return s[:-1]
+				return s
+			try:
+				html = driver.page_source 
+				listlink=[]
+				for xxx in range(0,300):
+					try:
+						Textc=html.split('href="')[xxx].split('"')[0]
+						if Textc.startswith('/') or Textc.startswith(link):
+							if len(Textc) > 5 and "." in Textc:
+								if link in Textc:
+									listlink.append(Textc)
+								else:
+									Textc=remove_trailing_slash(link)+Textc
+									listlink.append(Textc)
+
+					except:pass
+				self.tableWidget.setItem(x, 2, QtWidgets.QTableWidgetItem(f"Chuyển Hướng!"))
+				AAA=random.choice(listlink)
+				print(AAA)
+				driver.get(AAA)
+				self.DELAY(x)
+			   
+			except:
+				self.tableWidget.setItem(x, 2, QtWidgets.QTableWidgetItem(f"Chuyển Hướng!"))
+				print(link)
+				driver.get(link)
+				self.DELAY(x)
+		Run4=self.checkBox_4.isChecked()
+		Run5=self.checkBox_5.isChecked()
+
+		Run0=self.checkBox.isChecked()
+		Run2=self.checkBox_2.isChecked()
+		Run3=self.checkBox_3.isChecked()
+		Listsssss=[]
+		CUONTRANG_RD=random.randint(self.spinBox_10.value(),self.spinBox_11.value())
+		BoiDen_RD=random.randint(self.spinBox_4.value(),self.spinBox_5.value())
+		ChuyenTrang_RD=random.randint(self.spinBox_6.value(),self.spinBox_7.value())
+		HOME_RD=random.randint(self.spinBox_8.value(),self.spinBox_8.value())
+		for thuan in range(CUONTRANG_RD):
+			if Run4:Listsssss.append("CuonTrang")
+			#CuonTrang(driver,x)
+		for thuan in range(BoiDen_RD):
+			if Run0:Listsssss.append("BoiDen")
+				#BoiDen(driver,x)
+		for thuan in range(ChuyenTrang_RD):
+			if Run2:Listsssss.append("ChuyenTrang")
+				#ChuyenTrang(driver,x,link)
+		for thuan in range(HOME_RD):
+			if Run3:Listsssss.append("Home")
+				# driver.get(link)
+				# CuonTrang(driver,x)
+		random.shuffle(Listsssss)
+		random.shuffle(Listsssss)
+		random.shuffle(Listsssss)
+		dalam=0
+		for Loai in Listsssss:
+			try:
+				if Loai == 'CuonTrang':
+					self.tableWidget.setItem(x, 0, QtWidgets.QTableWidgetItem(f"ĐọcLướt[{len(Listsssss)-dalam}]"))
+					CuonTrang(driver,x)
+				if Loai == 'BoiDen':
+					self.tableWidget.setItem(x, 0, QtWidgets.QTableWidgetItem(f"BoiDen[{len(Listsssss)-dalam}]"))
+					BoiDen(driver,x)
+				if Loai == 'ChuyenTrang':
+					self.tableWidget.setItem(x, 0, QtWidgets.QTableWidgetItem(f"ChuyểnTrang[{len(Listsssss)-dalam}]"))
+					ChuyenTrang(driver,x,link)
+				if Loai == 'Home':
+					self.tableWidget.setItem(x, 0, QtWidgets.QTableWidgetItem(f"Home[{len(Listsssss)-dalam}]"))
+					driver.get(link)
+					CuonTrang(driver,x)
+			except:pass
+			dalam+=1
+		if Run5:
+			with open('data2.txt', 'r', encoding='utf-8') as file:
+				concu = file.read().split()
+			link2=random.choice(concu)
+			self.tableWidget.setItem(x, 0, QtWidgets.QTableWidgetItem(f"Chuyển Trang"))
+			self.tableWidget.setItem(x, 2, QtWidgets.QTableWidgetItem(f"{link2}"))
+			driver.get(link2)
+			time.sleep(3)
+			self.DELAY(x)
+			dalam=0
+			for Loai in Listsssss:
+				try:
+					if Loai == 'CuonTrang':
+						self.tableWidget.setItem(x, 0, QtWidgets.QTableWidgetItem(f"ĐọcLướt[{len(Listsssss)-dalam}]"))
+						CuonTrang(driver,x)
+					if Loai == 'BoiDen':
+						self.tableWidget.setItem(x, 0, QtWidgets.QTableWidgetItem(f"BoiDen[{len(Listsssss)-dalam}]"))
+						BoiDen(driver,x)
+					if Loai == 'ChuyenTrang':
+						self.tableWidget.setItem(x, 0, QtWidgets.QTableWidgetItem(f"ChuyểnTrang[{len(Listsssss)-dalam}]"))
+						ChuyenTrang(driver,x,link)
+					if Loai == 'Home':
+						self.tableWidget.setItem(x, 0, QtWidgets.QTableWidgetItem(f"Home[{len(Listsssss)-dalam}]"))
+						driver.get(link)
+						CuonTrang(driver,x)
+				except:pass
+				dalam+=1
+		self.tableWidget.setItem(x, 0, QtWidgets.QTableWidgetItem(f"Hết Thao Tác"))
+		self.tableWidget.setItem(x, 2, QtWidgets.QTableWidgetItem(f"Tương Tác Thành Công!"))
+		driver.quit()
+	def Batdau(self):
+		def Luong1():
+			self.run=True
+			self.dong=-1
+			self.fileloadgr()
+			
+			for x in range(self.spinBox_3.value()):
+				def Luong2():
+					while self.run:
+						
+						self.dong+=1
+						x=self.dong
+						with open('data.txt', 'r', encoding='utf-8') as file:
+							content = file.read().split()
+						ULL=random.choice(content)
+						print(ULL)
+						self.tableWidget.setItem(x, 2, QtWidgets.QTableWidgetItem(f"Mở Trình Duyệt"))
+						self.tableWidget.setItem(x, 0, QtWidgets.QTableWidgetItem(f"{ULL}"))
+						self.tableWidget.setItem(x, 1, QtWidgets.QTableWidgetItem(f"{ULL}"))
+						self.Chrome(ULL,x,self.listIDchrome[x])
+				Thread(target=Luong2).start()
+				time.sleep(2)
+		Thread(target=Luong1).start()
+	def retranslateUi(self, MainWindow):
+		_translate = QtCore.QCoreApplication.translate
+		MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+		item = self.tableWidget.horizontalHeaderItem(0)
+		item.setText(_translate("MainWindow", "#"))
+		item = self.tableWidget.horizontalHeaderItem(1)
+		item.setText(_translate("MainWindow", "URL"))
+		item = self.tableWidget.horizontalHeaderItem(2)
+		item.setText(_translate("MainWindow", "Trang web"))
+		self.groupBox.setTitle(_translate("MainWindow", "Chung"))
+		self.pushButton.setText(_translate("MainWindow", "Chạy"))
+		self.pushButton_2.setText(_translate("MainWindow", "Dừng"))
+		self.label_5.setText(_translate("MainWindow", "Số Luồng"))
+		self.groupBox_2.setTitle(_translate("MainWindow", "Cài Đặt"))
+		self.checkBox.setText(_translate("MainWindow", "Bôi Đen        "))
+		self.checkBox_2.setText(_translate("MainWindow", "Chuyển Hướng Trang"))
+		self.checkBox_3.setText(_translate("MainWindow", "Trở lại Trang Chính"))
+		self.checkBox_4.setText(_translate("MainWindow", "Đọc , Lướt , Cuộn"))
+		self.label.setText(_translate("MainWindow", "Thời Gian Thực Hiện Mỗi Hành Động "))
+		self.label_2.setText(_translate("MainWindow", "Từ"))
+		self.label_3.setText(_translate("MainWindow", "Đến"))
+		self.comboBox.setItemText(0, _translate("MainWindow", "Mặc Định"))
+		self.comboBox.setItemText(1, _translate("MainWindow", "Tuỳ Chỉnh"))
+		self.comboBox.setItemText(2, _translate("MainWindow", "Random"))
+		self.label_4.setText(_translate("MainWindow", "X:"))
+		self.label_6.setText(_translate("MainWindow", "Y:"))
+		self.label_7.setText(_translate("MainWindow", "Size Của Sổ :"))
+		self.groupBox_3.setTitle(_translate("MainWindow", "Số Lần Thao Tác X-X lần"))
+		self.checkBox_5.setText(_translate("MainWindow", "Chuyển Trang"))
+		self.pushButton_5.setText(_translate("MainWindow", "Link"))
+		self.label_8.setText(_translate("MainWindow", "Nơi Lưu Profiles"))
+		self.label_9.setText(_translate("MainWindow", "Gr ID (1,2,3)"))
+		self.pushButton_6.setText(_translate("MainWindow", "Load"))
+		self.pushButton_3.setText(_translate("MainWindow", "Liên kết"))
+
+
+
+		self.tableWidget.setColumnWidth(1, 180)
+		self.tableWidget.setColumnWidth(0, 100)
+
+		self.tableWidget.setColumnWidth(2, 200)
+
+
+
+
+if __name__ == "__main__":
+	import sys
+	app = QtWidgets.QApplication(sys.argv)
+	MainWindow = QtWidgets.QMainWindow()
+	ui = Ui_MainWindow()
+	ui.setupUi(MainWindow)
+	MainWindow.show()
+	sys.exit(app.exec())
