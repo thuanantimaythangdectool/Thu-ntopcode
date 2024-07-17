@@ -305,7 +305,7 @@ class Ui_Reghotmail(object):
                                 row_number = self.tableWidget.rowCount()
                                 self.tableWidget.insertRow(row_number)
                                 KEY_API=self.lineEdit_2.text()
-                                ACC=self.Reg(NAME,i,row_number,KEY_API,self.listIDchrome[self.sothutu])
+                                ACC=self.Reg(NAME,self.sothutu,self.sothutu,KEY_API,self.listIDchrome[self.sothutu])
                                 if ACC != False:
                                     TK=ACC.split("|")[0]
                                     MK=ACC.split("|")[1]
