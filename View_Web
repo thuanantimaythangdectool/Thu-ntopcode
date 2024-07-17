@@ -296,38 +296,38 @@ class Ui_MainWindow(object):
 			def Boi(driver):
 				solanloi=0
 				while solanloi <= 50:
-				    try:
-				        script = """
-				        var selection = window.getSelection();
-				        var tags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
-				        var elements = Array.from(document.querySelectorAll(tags.join(',')))
-				            .filter(element => {
-				                if (typeof element.getBoundingClientRect !== 'function') {
-				                    return false;
-				                }
-				                var rect = element.getBoundingClientRect();
-				                return rect.top >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
-				                    && element.textContent.trim().length > 50;
-				            });
-				        if (elements.length > 0) {
-				            var element = elements[Math.floor(Math.random() * elements.length)];
-				            var text = element.textContent.trim();
-				            var range = document.createRange();
-				            var startOffset = Math.floor(Math.random() * (text.length * 0.6));
-				            var endOffset = startOffset + Math.floor(text.length * (Math.random() * 0.2 + 0.4));
-				            range.setStart(element.firstChild, startOffset);
-				            range.setEnd(element.firstChild, endOffset);
-				            selection.removeAllRanges();
-				            selection.addRange(range);
-				            return text.substring(startOffset, endOffset);
-				        }
-				        return '';
-				            """
-				        return driver.execute_script(script)
-				        break
-				    except:
-				    	solanloi+=1
-				    	return 'False'
+					try:
+						script = """
+						var selection = window.getSelection();
+						var tags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+						var elements = Array.from(document.querySelectorAll(tags.join(',')))
+							.filter(element => {
+								if (typeof element.getBoundingClientRect !== 'function') {
+									return false;
+								}
+								var rect = element.getBoundingClientRect();
+								return rect.top >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
+									&& element.textContent.trim().length > 50;
+							});
+						if (elements.length > 0) {
+							var element = elements[Math.floor(Math.random() * elements.length)];
+							var text = element.textContent.trim();
+							var range = document.createRange();
+							var startOffset = Math.floor(Math.random() * (text.length * 0.6));
+							var endOffset = startOffset + Math.floor(text.length * (Math.random() * 0.2 + 0.4));
+							range.setStart(element.firstChild, startOffset);
+							range.setEnd(element.firstChild, endOffset);
+							selection.removeAllRanges();
+							selection.addRange(range);
+							return text.substring(startOffset, endOffset);
+						}
+						return '';
+							"""
+						return driver.execute_script(script)
+						break
+					except:
+						solanloi+=1
+				return 'False'
 			Texttboiden=Boi(driver)
 			self.tableWidget.setItem(x, 2, QtWidgets.QTableWidgetItem(f"Đã Bôi Đen {Texttboiden}!"))
 			print("Đã Bôi Đen:", Texttboiden)
