@@ -33,9 +33,11 @@ class Ui_MainWindow(object):
 		self.groupBox.setObjectName("groupBox")
 		self.pushButton = QtWidgets.QPushButton(parent=self.groupBox)
 		self.pushButton.setGeometry(QtCore.QRect(10, 20, 61, 23))
+		self.pushButton.setStyleSheet("background-color: rgb(85, 255, 127);")
 		self.pushButton.setObjectName("pushButton")
 		self.pushButton_2 = QtWidgets.QPushButton(parent=self.groupBox)
 		self.pushButton_2.setGeometry(QtCore.QRect(80, 20, 61, 23))
+		self.pushButton_2.setStyleSheet("background-color: rgb(170, 0, 0);")
 		self.pushButton_2.setObjectName("pushButton_2")
 		self.label_5 = QtWidgets.QLabel(parent=self.groupBox)
 		self.label_5.setGeometry(QtCore.QRect(160, 20, 61, 16))
@@ -151,7 +153,7 @@ class Ui_MainWindow(object):
 		self.label_9.setGeometry(QtCore.QRect(380, 130, 101, 16))
 		self.label_9.setObjectName("label_9")
 		self.pushButton_6 = QtWidgets.QPushButton(parent=self.groupBox_2)
-		self.pushButton_6.setGeometry(QtCore.QRect(380, 170, 51, 23))
+		self.pushButton_6.setGeometry(QtCore.QRect(380, 190, 101, 23))
 		self.pushButton_6.setObjectName("pushButton_6")
 		self.pushButton_3 = QtWidgets.QPushButton(parent=self.groupBox)
 		self.pushButton_3.setGeometry(QtCore.QRect(330, 20, 75, 23))
@@ -163,7 +165,7 @@ class Ui_MainWindow(object):
 
 
 		self.pushButton_5.clicked.connect(self.filel2)
-		self.pushButton_6.clicked.connect(self.fileloadgr)
+		self.pushButton_6.clicked.connect(self.save_state)
 
 		self.fileload()
 
@@ -534,27 +536,46 @@ class Ui_MainWindow(object):
 				time.sleep(2)
 		Thread(target=Luong1).start()
 	def save_state(self):
-		
-		TEXT=self.lineEdit_3.text()+"|"+self.lineEdit_4.text()
+		Run4=self.checkBox_4.isChecked()
+		Run5=self.checkBox_5.isChecked()
+		Run1=self.checkBox.isChecked()
+		Run2=self.checkBox_2.isChecked()
+		Run3=self.checkBox_3.isChecked()
+		TEXT=self.lineEdit.text()+"|"+self.lineEdit_2.text()+"|"+self.lineEdit_3.text()+"|"+self.lineEdit_4.text()+"|"+str(self.spinBox.value())+"|"+str(self.spinBox_2.value())+"|"+str(self.spinBox_3.value())+"|"+str(self.spinBox_4.value())+"|"+str(self.spinBox_5.value())+"|"+str(self.spinBox_6.value())+"|"+str(self.spinBox_7.value())+"|"+str(self.spinBox_8.value())+"|"+str(self.spinBox_9.value())+"|"+str(self.spinBox_10.value())+"|"+str(self.spinBox_11.value())+"|"+str(Run1)+"|"+str(Run2)+"|"+str(Run3)+"|"+str(Run4)+"|"+str(Run5)
 		with open('Setting.txt', "w+") as file:
 			file.write(TEXT)
 
 
-
-
-
-
-
-
-
-
 	def load_state(self):
 		# Reading data from the file
+		def DOI(gt):
+			if gt == 'True':return True
+			else:return False
 		try:
 			with open('Setting.txt', 'r', encoding='utf-8') as file:
 				content = file.read()
-			self.lineEdit_3.setText(content.split("|")[0])
-			self.lineEdit_4.setText(content.split("|")[1])
+			self.lineEdit.setText(content.split("|")[0])
+			self.lineEdit_2.setText(content.split("|")[1])
+			self.lineEdit_3.setText(content.split("|")[2])
+			self.lineEdit_4.setText(content.split("|")[3])
+			self.spinBox.setValue(int(content.split("|")[4]))
+			self.spinBox_2.setValue(int(content.split("|")[5]))
+			self.spinBox_3.setValue(int(content.split("|")[6]))
+			self.spinBox_4.setValue(int(content.split("|")[7]))
+			self.spinBox_5.setValue(int(content.split("|")[8]))
+			self.spinBox_6.setValue(int(content.split("|")[9]))
+			self.spinBox_7.setValue(int(content.split("|")[10]))
+			self.spinBox_8.setValue(int(content.split("|")[11]))
+			self.spinBox_9.setValue(int(content.split("|")[12]))
+			self.spinBox_10.setValue(int(content.split("|")[13]))
+			self.spinBox_11.setValue(int(content.split("|")[14]))
+			self.checkBox.setChecked(DOI(content.split("|")[15]))
+			self.checkBox_2.setChecked(DOI(content.split("|")[16]))
+			self.checkBox_3.setChecked(DOI(content.split("|")[17]))
+			self.checkBox_4.setChecked(DOI(content.split("|")[18]))
+			self.checkBox_5.setChecked(DOI(content.split("|")[19]))
+
+
 		except:pass
 	def retranslateUi(self, MainWindow):
 		_translate = QtCore.QCoreApplication.translate
@@ -588,7 +609,7 @@ class Ui_MainWindow(object):
 		self.pushButton_5.setText(_translate("MainWindow", "Link"))
 		self.label_8.setText(_translate("MainWindow", "Nơi Lưu Profiles"))
 		self.label_9.setText(_translate("MainWindow", "Gr ID (1,2,3)"))
-		self.pushButton_6.setText(_translate("MainWindow", "Load"))
+		self.pushButton_6.setText(_translate("MainWindow", "Lưu Setting"))
 		self.pushButton_3.setText(_translate("MainWindow", "Liên kết"))
 
 
