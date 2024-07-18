@@ -157,7 +157,6 @@ class Ui_MainWindow(object):
 		self.pushButton_3.setGeometry(QtCore.QRect(330, 20, 75, 23))
 		self.pushButton_3.setObjectName("pushButton_3")
 		MainWindow.setCentralWidget(self.centralwidget)
-
 		self.pushButton.clicked.connect(self.Batdau)
 		self.pushButton_2.clicked.connect(self.dung)
 		self.pushButton_3.clicked.connect(self.file)
@@ -168,6 +167,7 @@ class Ui_MainWindow(object):
 
 		self.fileload()
 
+		self.load_state()
 
 		self.retranslateUi(MainWindow)
 		QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -189,6 +189,8 @@ class Ui_MainWindow(object):
 	def fileload(self):
 		pass
 	def fileloadgr(self):
+		self.save_state()
+
 		self.tableWidget.setRowCount(0)
 		self.listIDchrome=[]
 		a_c=requests.get("http://127.0.0.1:19995/api/v3/profiles").json()
@@ -262,13 +264,71 @@ class Ui_MainWindow(object):
 		self.DELAY(x)
 	   
 
-	   
+		def Rechuot(driver):
+			script = """
+			// Tạo một phần tử để làm con trỏ chuột
+			var cursor = document.createElement('div');
+			cursor.style.width = '32px';  // Kích thước của hình ảnh con chuột
+			cursor.style.height = '32px';
+			cursor.style.backgroundImage = 'url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAYhJREFUWEe9179LVlEYAOBHCBxaRRdpctJBwd3FhqJF1Kk218jBSf8CXa1otEUIQnATQQVB0s1JiAYhos0hqFFD74ErfOT54Nx7z+kd7z3nvM957w/eM+BhTOIA+1jCTWRMtksDkZXe4G19/TNelUTEAMvY7IHt4CWus227Z6EUQBheDJEKKIZoAiiCaArIjmgDyIpoC8iG6ALIgugK6IzIAeiEyAVojcgJaIXIDWiMKAFohCgFSEaUBCQhSgMC4lPdT0Tbif8BuMUIrmKCXIA9/OzTMZ1gu183lQvwDqGVaxy5AH8wit9NBU0BX/AYU5FEr/GhJOAUz7CAj5FEXzGB8NIlR2oF7pOHUg9WB5Yf1W6HI1me4ig5O1IAvcnv117HaiTRLuZzAkLy55GX6wku8eifZH+rT24M31MRsQrM1GU8wwuEssci7HYucmMDa10AYe4QfiHsqF/M4jBy8xzTXQEp80P1LjDeM/hb9bhWEP6MSRF7BEkT60GL2MJxVbX39bG+0Wd4B39MbCEuQYmfAAAAAElFTkSuQmCC")';
+			cursor.style.backgroundSize = 'cover';
+			cursor.style.position = 'absolute';
+			cursor.style.zIndex = '9999';
+			cursor.style.pointerEvents = 'none';  // Để con trỏ chuột không ảnh hưởng tới các sự kiện chuột khác
+			document.body.appendChild(cursor);
+
+			var moveInterval = null;
+			var stopFlag = false;
+
+			function moveCursor(x, y) {
+				cursor.style.left = x + 'px';
+				cursor.style.top = y + 'px';
+			}
+
+			function animateMouseMovement() {
+				if (stopFlag) {
+					clearInterval(moveInterval);
+					return;
+				}
+				var width = window.innerWidth;
+				var height = window.innerHeight;
+				var x = Math.random() * width;
+				var y = Math.random() * height;
+				moveCursor(x, y);
+			}
+
+			// Bắt đầu di chuyển chuột với tốc độ 1 giây/lần
+			moveInterval = setInterval(animateMouseMovement, 2500);
+
+			// Hàm để dừng thao tác
+			function stopMouseMovements() {
+				stopFlag = true;
+			}
+
+			// Gắn hàm dừng thao tác vào window để có thể gọi từ Python
+			window.stopMouseMovements = stopMouseMovements;
+			 // Theo dõi sự kiện cuộn trang
+		window.addEventListener('scroll', function() {
+			var scrollX = window.scrollX || window.pageXOffset;
+			var scrollY = window.scrollY || window.pageYOffset;
+			moveCursor(scrollX + Math.random() * window.innerWidth, scrollY + Math.random() * window.innerHeight);
+		});
+			"""
+			driver.execute_script(script)
+			time.sleep(10)
+			driver.execute_script("window.stopMouseMovements();")
+			return script
+
+
+		
+
 		def CuonTrang(driver,x):
 			s1=random.randint(800,1200)
 			s2=random.randint(1800,2200)
 			s3=random.randint(2800,3200)
 			s4=random.randint(800,1200)
 			s5=random.randint(400,800)
+			Rechuot(driver)
 			self.tableWidget.setItem(x, 2, QtWidgets.QTableWidgetItem(f"Cuộn Xuống Trang Đọc"))
 			for i in range(0, s1, 50):  # Cuộn mỗi lần 100 pixel
 				driver.execute_script(f"window.scrollTo(0, {i});")
@@ -279,6 +339,7 @@ class Ui_MainWindow(object):
 				driver.execute_script(f"window.scrollTo(0, {i});")
 				time.sleep(0.01)
 			self.DELAY(x)
+
 			self.tableWidget.setItem(x, 2, QtWidgets.QTableWidgetItem(f"Cuộn Xuống Trang Đọc"))
 			for i in range(s2, s3, 50):  # Cuộn mỗi lần 100 pixel
 				driver.execute_script(f"window.scrollTo(0, {i});")
@@ -297,47 +358,47 @@ class Ui_MainWindow(object):
 				script = """
 				var tags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
 				var elements = Array.from(document.querySelectorAll(tags.join(',')))
-				    .filter(element => {
-				        if (typeof element.getBoundingClientRect !== 'function') {
-				            return false;
-				        }
-				        var rect = element.getBoundingClientRect();
-				        return rect.top >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
-				            && element.textContent.trim().length > 50;
-				    });
+					.filter(element => {
+						if (typeof element.getBoundingClientRect !== 'function') {
+							return false;
+						}
+						var rect = element.getBoundingClientRect();
+						return rect.top >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
+							&& element.textContent.trim().length > 50;
+					});
 
 				if (elements.length > 0) {
-				    var element = elements[Math.floor(Math.random() * elements.length)];
-				    var text = element.textContent.trim();
-				    var words = text.split(' ');
-				    var startWordIndex = Math.floor(Math.random() * (words.length * 0.6));
-				    var endWordIndex = startWordIndex + Math.floor(words.length * (Math.random() * 0.2 + 0.4));
-				    var startOffset = words.slice(0, startWordIndex).join(' ').length;
-				    var endOffset = words.slice(0, endWordIndex).join(' ').length;
+					var element = elements[Math.floor(Math.random() * elements.length)];
+					var text = element.textContent.trim();
+					var words = text.split(' ');
+					var startWordIndex = Math.floor(Math.random() * (words.length * 0.6));
+					var endWordIndex = startWordIndex + Math.floor(words.length * (Math.random() * 0.2 + 0.4));
+					var startOffset = words.slice(0, startWordIndex).join(' ').length;
+					var endOffset = words.slice(0, endWordIndex).join(' ').length;
 
-				    // Adjust offsets to account for spaces
-				    if (startOffset > 0) startOffset += 1;
-				    if (endOffset > 0) endOffset += 1;
+					// Adjust offsets to account for spaces
+					if (startOffset > 0) startOffset += 1;
+					if (endOffset > 0) endOffset += 1;
 
 				   
 				   
-				    return text.substring(startOffset, endOffset);
+					return text.substring(startOffset, endOffset);
 				}
 				return '';
 
 
-				        """
+						"""
 				while True:
-				    concu=driver.execute_script(script)
-				    if len(concu) > 5:break
+					concu=driver.execute_script(script)
+					if len(concu) > 5:break
 				print('Text:',concu)
 
 				elements = driver.find_elements(By.XPATH, "//*[contains(text(), '"+concu+"')]")
 				for element in elements:
-				    driver.execute_script("arguments[0].style.backgroundColor = 'royalblue'; arguments[0].style.color = 'white';", element)
+					driver.execute_script("arguments[0].style.backgroundColor = 'royalblue'; arguments[0].style.color = 'white';", element)
 				return concu
 			Texttboiden=Boi(driver)
-			self.tableWidget.setItem(x, 2, QtWidgets.QTableWidgetItem(f"Bôi Đen {Texttboiden}..!"))
+			self.tableWidget.setItem(x, 2, QtWidgets.QTableWidgetItem(f"Bôi Đen/ Sao Chép {Texttboiden}..!"))
 			print("Đã Bôi Đen:", Texttboiden)
 			time.sleep(5)
 			self.DELAY(x)
@@ -453,6 +514,7 @@ class Ui_MainWindow(object):
 			self.dong=-1
 			self.fileloadgr()
 			
+			
 			for x in range(self.spinBox_3.value()):
 				def Luong2():
 					while self.run:
@@ -470,6 +532,29 @@ class Ui_MainWindow(object):
 				Thread(target=Luong2).start()
 				time.sleep(2)
 		Thread(target=Luong1).start()
+	def save_state(self):
+		
+		TEXT=self.lineEdit_3.text()+"|"+self.lineEdit_4.text()
+		with open('Setting.txt', "w+") as file:
+			file.write(TEXT)
+
+
+
+
+
+
+
+
+
+
+	def load_state(self):
+		# Reading data from the file
+		try:
+			with open('Setting.txt', 'r', encoding='utf-8') as file:
+				content = file.read()
+			self.lineEdit_3.setText(content.split("|")[0])
+			self.lineEdit_4.setText(content.split("|")[1])
+		except:pass
 	def retranslateUi(self, MainWindow):
 		_translate = QtCore.QCoreApplication.translate
 		MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
