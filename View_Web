@@ -298,7 +298,7 @@ class Ui_MainWindow(object):
 			}
 
 			// Bắt đầu di chuyển chuột với tốc độ 1 giây/lần
-			moveInterval = setInterval(animateMouseMovement, 2500);
+			moveInterval = setInterval(animateMouseMovement, 3000);
 
 			// Hàm để dừng thao tác
 			function stopMouseMovements() {
@@ -328,6 +328,7 @@ class Ui_MainWindow(object):
 			s3=random.randint(2800,3200)
 			s4=random.randint(800,1200)
 			s5=random.randint(400,800)
+			self.tableWidget.setItem(x, 2, QtWidgets.QTableWidgetItem(f"Re Chuot Random"))
 			Rechuot(driver)
 			self.tableWidget.setItem(x, 2, QtWidgets.QTableWidgetItem(f"Cuộn Xuống Trang Đọc"))
 			for i in range(0, s1, 50):  # Cuộn mỗi lần 100 pixel
