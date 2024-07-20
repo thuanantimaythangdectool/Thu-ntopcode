@@ -132,20 +132,17 @@ class Ui_Reghotmail(object):
         print("dừng")
         self.LUONGCGA = False
     def Reg(self,NAME,stt,dong,KEY_API,IDprofiles):
-        xx=stt*300
+        xx=stt*900
         yy=0
-        if xx >= 1600 and xx < 3200: 
-            yy=400
-            xx=(stt-5)*400
-        if xx >= 3200 and xx < 4800:
+        if xx >= 4800 and xx < 9600: 
+            yy=1200
+            xx=(stt-5)*900
+        if xx >= 9600 and xx < 10400:
             yy=800
             xx=(stt-10)*400
         if xx >= 4800 and xx < 5400:
             yy=1200
             xx=(stt-15)*400
-        if xx >= 5400 and xx < 6000:
-            yy=1600
-            xx=(stt-20)*400
         def generate_random_string():
             first_char = random.choice(string.ascii_lowercase)  # Chọn ngẫu nhiên một chữ cái viết thường làm ký tự đầu tiên
             remaining_chars = ''.join(random.choices(string.ascii_letters + string.digits, k=16))  # Chọn các ký tự còn lại
@@ -178,7 +175,8 @@ class Ui_Reghotmail(object):
         options.add_argument("--disable-blink-features=AutomationControlled")
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
         options.add_argument(f"window-position={xx},{yy}")
-        options.add_argument(f"window-size=300,400")
+        options.add_argument(f"window-size=900,1200")
+        options.add_argument("--force-device-scale-factor=0.25")
         TK=str(generate_random_string())+"@"+self.comboBox_2.currentText()
         MK=str(generate_random_string())
         self.tableWidget.setItem(dong, 0, QtWidgets.QTableWidgetItem(f"{TK}"))
@@ -306,7 +304,7 @@ class Ui_Reghotmail(object):
                                     row_number = self.tableWidget.rowCount()
                                     self.tableWidget.insertRow(row_number)
                                     KEY_API=self.lineEdit_2.text()
-                                    ACC=self.Reg(NAME,self.sothutu,self.sothutu,KEY_API,self.listIDchrome[self.sothutu])
+                                    ACC=self.Reg(NAME,i,self.sothutu,KEY_API,self.listIDchrome[self.sothutu])
                                     if ACC != False:
                                         TK=ACC.split("|")[0]
                                         MK=ACC.split("|")[1]
