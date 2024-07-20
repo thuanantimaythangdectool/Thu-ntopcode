@@ -134,15 +134,12 @@ class Ui_Reghotmail(object):
     def Reg(self,NAME,stt,dong,KEY_API,IDprofiles):
         xx=stt*900
         yy=0
-        if xx >= 4800 and xx < 9600: 
+        if xx >= 7200 and xx < (7200*2): 
             yy=1200
             xx=(stt-5)*900
-        if xx >= 9600 and xx < 10400:
-            yy=800
-            xx=(stt-10)*400
-        if xx >= 4800 and xx < 5400:
-            yy=1200
-            xx=(stt-15)*400
+        if xx >= (7200*2) and xx < (7200*3):
+            yy=2400
+            xx=(stt-10)*900
         def generate_random_string():
             first_char = random.choice(string.ascii_lowercase)  # Chọn ngẫu nhiên một chữ cái viết thường làm ký tự đầu tiên
             remaining_chars = ''.join(random.choices(string.ascii_letters + string.digits, k=16))  # Chọn các ký tự còn lại
