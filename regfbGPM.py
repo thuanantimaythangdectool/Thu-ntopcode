@@ -144,7 +144,7 @@ def Reg(stt,MK,NoiChuaprofile):
 MK=input("Nhập Pass: ")
 duongdang=input("Nhập Tệp Proxy: ")
 NoiChuaprofile=input("Nhập Nơi Chứa Profiles GPM: ")
-luong=input("Nhập Số Luồng Muốn chạy : ")
+luong=int(input("Nhập Số Luồng Muốn chạy : "))
 for x in range(luong):
 	def run(x,MK,NoiChuaprofile):
 		x=int(x)
