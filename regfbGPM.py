@@ -1,6 +1,3 @@
-from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget
-from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox
-from PyQt6 import QtCore, QtGui, QtWidgets
 from threading import Thread
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -147,7 +144,8 @@ def Reg(stt,MK,NoiChuaprofile):
 MK=input("Nhập Pass: ")
 duongdang=input("Nhập Tệp Proxy: ")
 NoiChuaprofile=input("Nhập Nơi Chứa Profiles GPM: ")
-for x in range(3):
+luong=input("Nhập Số Luồng Muốn chạy : ")
+for x in range(luong):
 	def run(x,MK,NoiChuaprofile):
 		x=int(x)
 		while True:
