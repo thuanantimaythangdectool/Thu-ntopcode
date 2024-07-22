@@ -9,7 +9,6 @@ import time, requests, json ,string ,random,os
 import requests
 def Reg(stt,MK,NoiChuaprofile):
 	try:
-		print(stt)
 		xx=stt*800
 		yy=0
 		if xx >= 3200 :
@@ -75,7 +74,7 @@ def Reg(stt,MK,NoiChuaprofile):
 		driver = webdriver.Chrome(options=options)
 		driver.get('https://www.facebook.com/reg')
 		WebWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div[1]/div[1]/div[2]/div/div[2]/div/div/div[1]/form/div[1]/div[1]/div[1]/div[1]/div/div[1]/input")))
-		name=requests.get("https://story-shack-cdn-v2.glitch.me/generators/vietnamese-name-generator/male?count=5").json()['data'][1]
+		name=requests.get("https://story-shack-cdn-v2.glitch.me/generators/vietnamese-name-generator/male?count=5").json()['data'][1]['name']
 		driver.find_element(By.XPATH, "/html/body/div[1]/div[1]/div[1]/div[2]/div/div[2]/div/div/div[1]/form/div[1]/div[1]/div[1]/div[1]/div/div[1]/input").send_keys(name.split(" ")[0]+' '+name.split(" ")[1])
 		driver.find_element(By.XPATH, "/html/body/div[1]/div[1]/div[1]/div[2]/div/div[2]/div/div/div[1]/form/div[1]/div[1]/div[1]/div[2]/div/div[1]/input").send_keys(name.split(" ")[2])
 		driver.find_element(By.XPATH, "/html/body/div[1]/div[1]/div[1]/div[2]/div/div[2]/div/div/div[1]/form/div[1]/div[2]/div/div[1]/input").send_keys(emails)
@@ -144,8 +143,8 @@ def Reg(stt,MK,NoiChuaprofile):
 MK=input("Nhập Pass: ")
 duongdang=input("Nhập Tệp Proxy: ")
 NoiChuaprofile=input("Nhập Nơi Chứa Profiles GPM: ")
-luong=int(input("Nhập Số Luồng Muốn chạy : "))
-for x in range(luong):
+luong=input("Nhập Số Luồng Muốn chạy : ")
+for x in range(int(luong)):
 	def run(x,MK,NoiChuaprofile):
 		x=int(x)
 		while True:
