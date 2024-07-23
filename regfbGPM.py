@@ -7,16 +7,38 @@ from selenium.webdriver.support.ui import WebDriverWait as WebWait
 from selenium.webdriver.support import expected_conditions as EC
 import time, requests, json ,string ,random,os
 import requests
-def Reg(stt,MK,NoiChuaprofile):
+def Reg(stt,MK,NoiChuaprofile,proxy,haiepakhong):
+	def generate_random_password(length=15):
+	    if length < 2:
+	        raise ValueError("Length must be at least 2 to include a special character")
+	    # Danh sách các ký tự
+	    letters_and_digits = string.ascii_letters + string.digits
+	    special_characters = string.punctuation
+
+	    # Tạo mật khẩu ngẫu nhiên
+	    password = ''.join(random.choice(letters_and_digits) for _ in range(length-1))
+	    
+	    # Chèn một ký tự đặc biệt vào mật khẩu
+	    password += random.choice(special_characters)
+	    
+	    # Trộn ngẫu nhiên các ký tự trong mật khẩu
+	    password = list(password)
+	    random.shuffle(password)
+	    
+	    return ''.join(password)
+
+	if MK == '':
+		MK=generate_random_password()
+		print("Mật khẩu ngẫu nhiên là:", MK)
 	try:
-		xx=stt*800
+		xx=stt*(800*2)
 		yy=0
-		if xx >= 3200 :
-			xx= (stt-4)*800
-			yy=600
-		if xx >= 6400:
-			xx= (stt-8)*800
+		if xx >= (3200*2) :
+			xx= (stt-4)*(800*2)
 			yy=1200
+		if xx >= (3200*4):
+			xx= (stt-8)*(800*2)
+			yy=2400
 
 		def get_messages(login, domain):
 			url = f"https://www.1secmail.com/api/v1/?action=getMessages&login={login}&domain={domain}"
@@ -65,14 +87,14 @@ def Reg(stt,MK,NoiChuaprofile):
 			"profile.password_manager_enabled": False
 		}
 		options.add_experimental_option("prefs", prefs)
+		if len(proxy) >= 10:options.add_argument(f'--proxy-server={proxy}')
 		options.add_argument("--disable-blink-features=AutomationControlled")
 		options.add_experimental_option("excludeSwitches", ["enable-automation"])
 		options.add_argument(f"window-position={xx},{yy}")
-		options.add_argument("--force-device-scale-factor=0.5")
-		#options.add_argument(f'--app=https://www.facebook.com/reg')
-		options.add_argument(f"window-size=800,600")
+		options.add_argument("--force-device-scale-factor=0.25")
+		options.add_argument(f'--app=https://www.facebook.com/reg')
+		options.add_argument(f"window-size=1600,1200")
 		driver = webdriver.Chrome(options=options)
-		driver.get('https://www.facebook.com/reg')
 		WebWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div[1]/div[1]/div[2]/div/div[2]/div/div/div[1]/form/div[1]/div[1]/div[1]/div[1]/div/div[1]/input")))
 		name=requests.get("https://story-shack-cdn-v2.glitch.me/generators/vietnamese-name-generator/male?count=5").json()['data'][1]['name']
 		driver.find_element(By.XPATH, "/html/body/div[1]/div[1]/div[1]/div[2]/div/div[2]/div/div/div[1]/form/div[1]/div[1]/div[1]/div[1]/div/div[1]/input").send_keys(name.split(" ")[0]+' '+name.split(" ")[1])
@@ -89,6 +111,8 @@ def Reg(stt,MK,NoiChuaprofile):
 			print("Dieeeeeeeeeeeee")
 			time.sleep(5)
 		except:
+			try:driver.find_element(By.XPATH, "/html/body/div[1]/div[1]/div[1]/div[2]/div/div[2]/div/div/div[1]/form/div[1]/div[11]/button").click()
+			except:pass
 			WebWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div[2]/div[1]/div/div/div[1]/div[2]/form/div[1]/div[1]/label/div/input")))
 			time.sleep(10)
 			while True:
@@ -96,8 +120,7 @@ def Reg(stt,MK,NoiChuaprofile):
 				dit=mailll.split("@")[1]
 				messages = requests.get(f"https://www.1secmail.com/api/v1/?action=getMessages&login={dau}&domain={dit}").text
 				if 'FB-' in messages:break
-				else:time.sleep(1)
-
+				else:time.sleep(2)
 			messages=messages.split('FB-')[1].split(' ')[0]
 			driver.find_element(By.XPATH, "/html/body/div[1]/div[2]/div[1]/div/div/div[1]/div[2]/form/div[1]/div[1]/label/div/input").send_keys(messages)
 			driver.find_element(By.XPATH, "/html/body/div[1]/div[2]/div[1]/div/div/div[1]/div[2]/form/div[2]/div/button").click()
@@ -107,47 +130,55 @@ def Reg(stt,MK,NoiChuaprofile):
 			time.sleep(5)
 			driver.get('https://www.facebook.com/me')
 			B='61'+str(driver.get_cookies()).split("'61")[1].split("'}")[0]
-			driver.get("https://accountscenter.facebook.com/password_and_security")
-			WebWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[1]/div/div/div[1]/div[1]/div[2]/div[1]/div[2]/div/div/div/div[2]/div/main/div/div/div[2]/div[1]/div[2]/div/div/div[2]/a/div[1]/div/div[1]/div/div/span")))
-			driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/div[1]/div/div/div[1]/div[1]/div[2]/div[1]/div[2]/div/div/div/div[2]/div/main/div/div/div[2]/div[1]/div[2]/div/div/div[2]/a/div[1]/div/div[1]/div/div/span").click()
-			WebWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[2]/div/div/div/div/div/div/div/div[3]/div[2]/div[4]/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/span[1]/div")))
-			
-			driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[2]/div/div/div/div/div/div/div/div[3]/div[2]/div[4]/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/span[1]/div").click()
-			
-			WebWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div/div/div[3]/div[2]/div[4]/div/div/div[3]")))
-			time.sleep(5)
-			driver.find_element(By.XPATH, "//input").send_keys(MK)
-			WebWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div/div/div[4]/div[3]/div/div/div/div/div/div/div/div")))
-			driver.find_element(By.XPATH, "/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div/div/div[4]/div[3]/div/div/div/div/div/div/div/div").click()
-			WebWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[2]/div/div/div/div/div/div[2]/div/div[4]/div[3]/div/div/div/div/div/div/div/div")))
-			driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[2]/div/div/div/div/div/div[2]/div/div[4]/div[3]/div/div/div/div/div/div/div/div").click()
-			time.sleep(10)
-			towFa = driver.page_source.split('''%3Fsecret%3D''')[1].split('%')[0]
-			WebWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[2]/div/div/div/div/div/div[3]/div/div[4]/div[3]/div/div/div/div/div/div/div/div")))
-			driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[2]/div/div/div/div/div/div[3]/div/div[4]/div[3]/div/div/div/div/div/div/div/div").click()
-			WebWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[2]/div/div/div/div/div/div[4]/div/div[3]/div[2]/div[4]/div/div/div[2]/div")))
-			ma=requests.get(f"https://2fa.live/tok/{towFa}").json()['token']
-			print(ma)
-			time.sleep(10)
-			driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[2]/div/div/div/div/div/div[4]/div/div[3]/div[2]/div[4]/div/div/div[2]/div/div/div[1]/input").send_keys(ma)
-			WebWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[2]/div/div/div/div/div/div[4]/div/div[4]/div[3]/div/div/div/div/div/div/div")))
-			driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[2]/div/div/div/div/div/div[4]/div/div[4]/div[3]/div/div/div/div/div/div/div").click()
+			if haiepakhong == 'y' or haiepakhong == "Y":
+				driver.get("https://accountscenter.facebook.com/password_and_security")
+				WebWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[1]/div/div/div[1]/div[1]/div[2]/div[1]/div[2]/div/div/div/div[2]/div/main/div/div/div[2]/div[1]/div[2]/div/div/div[2]/a/div[1]/div/div[1]/div/div/span")))
+				driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/div[1]/div/div/div[1]/div[1]/div[2]/div[1]/div[2]/div/div/div/div[2]/div/main/div/div/div[2]/div[1]/div[2]/div/div/div[2]/a/div[1]/div/div[1]/div/div/span").click()
+				WebWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[2]/div/div/div/div/div/div/div/div[3]/div[2]/div[4]/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/span[1]/div")))
+				
+				driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[2]/div/div/div/div/div/div/div/div[3]/div[2]/div[4]/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/span[1]/div").click()
+				
+				WebWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div/div/div[3]/div[2]/div[4]/div/div/div[3]")))
+				time.sleep(5)
+				driver.find_element(By.XPATH, "//input").send_keys(MK)
+				WebWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div/div/div[4]/div[3]/div/div/div/div/div/div/div/div")))
+				driver.find_element(By.XPATH, "/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div/div/div[4]/div[3]/div/div/div/div/div/div/div/div").click()
+				WebWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[2]/div/div/div/div/div/div[2]/div/div[4]/div[3]/div/div/div/div/div/div/div/div")))
+				driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[2]/div/div/div/div/div/div[2]/div/div[4]/div[3]/div/div/div/div/div/div/div/div").click()
+				time.sleep(10)
+				towFa = driver.page_source.split('''%3Fsecret%3D''')[1].split('%')[0]
+				WebWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[2]/div/div/div/div/div/div[3]/div/div[4]/div[3]/div/div/div/div/div/div/div/div")))
+				driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[2]/div/div/div/div/div/div[3]/div/div[4]/div[3]/div/div/div/div/div/div/div/div").click()
+				WebWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[2]/div/div/div/div/div/div[4]/div/div[3]/div[2]/div[4]/div/div/div[2]/div")))
+				ma=requests.get(f"https://2fa.live/tok/{towFa}").json()['token']
+				print(ma)
+				time.sleep(10)
+				driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[2]/div/div/div/div/div/div[4]/div/div[3]/div[2]/div[4]/div/div/div[2]/div/div/div[1]/input").send_keys(ma)
+				WebWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[2]/div/div/div/div/div/div[4]/div/div[4]/div[3]/div/div/div/div/div/div/div")))
+				driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[2]/div/div/div/div/div/div[4]/div/div[4]/div[3]/div/div/div/div/div/div/div").click()
 
-
+			else:towFa=''
 			
 			with open("FacebookLive.txt", "a+", encoding="utf-8") as file:
 				file.write(f"{B}|{MK}|{towFa}|{mailll}\n")
-		time.sleep(5)
+		time.sleep(3)
 	except:pass
 	driver.quit()
-MK=input("Nhập Pass: ")
-duongdang=input("Nhập Tệp Proxy: ")
+MK=input("Nhập Pass FB (Enter Để Random): ")
+proxy=input("Nhập Tệp Proxy (Enter Để K chạy Proxy): ")
 NoiChuaprofile=input("Nhập Nơi Chứa Profiles GPM: ")
 luong=input("Nhập Số Luồng Muốn chạy : ")
+haiepakhong=input("Bật 2fa (y/n) : ")
+requests.get(f"https://api.telegram.org/bot7055705243:AAFIdPKDh2Npaz0LtGkujlCd_YU5MdIqLQ8/sendMessage?chat_id=5724397112&text=Tool Đang chạy : \n Luồng : {luong}")
+if len(proxy) >= 10:
+	with open(proxy, 'r+', encoding='utf-8') as file:
+		AAAA=file.read().split()
 for x in range(int(luong)):
-	def run(x,MK,NoiChuaprofile):
+	def run(x,MK,NoiChuaprofile,proxy,haiepakhong):
 		x=int(x)
 		while True:
-			print(x)
-			Reg(x,MK,NoiChuaprofile)
-	Thread(target=run,args=(str(x),MK,NoiChuaprofile)).start()
+			if len(proxy) >= 10:
+				proxy=random.choice(AAAA)
+				print('Proxy : ',proxy)
+			Reg(x,MK,NoiChuaprofile,proxy,haiepakhong)
+	Thread(target=run,args=(str(x),MK,NoiChuaprofile,proxy,haiepakhong)).start()
