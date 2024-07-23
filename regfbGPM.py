@@ -169,7 +169,7 @@ proxy=input("Nhập Tệp Proxy (Enter Để K chạy Proxy): ")
 NoiChuaprofile=input("Nhập Nơi Chứa Profiles GPM: ")
 luong=input("Nhập Số Luồng Muốn chạy : ")
 haiepakhong=input("Bật 2fa (y/n) : ")
-requests.get(f"https://api.telegram.org/bot7055705243:AAFIdPKDh2Npaz0LtGkujlCd_YU5MdIqLQ8/sendMessage?chat_id=5724397112&text=Tool Đang chạy : \n Luồng : {luong}")
+requests.get(f"https://api.telegram.org/bot7055705243:AAFIdPKDh2Npaz0LtGkujlCd_YU5MdIqLQ8/sendMessage?chat_id=5724397112&text=[REGFB] Tool Đang chạy : \n Luồng : {luong}")
 if len(proxy) >= 10:
 	with open(proxy, 'r+', encoding='utf-8') as file:
 		AAAA=file.read().split()
