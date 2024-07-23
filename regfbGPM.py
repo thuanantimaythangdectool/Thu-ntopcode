@@ -67,7 +67,10 @@ def Reg(stt,MK,NoiChuaprofile,proxy,haiepakhong):
 		data = {
 			"profile_name": "RegFb","group_name": "RegFb","browser_core": "chromium","browser_name": "Chrome","browser_version": "119.0.6045.124","is_random_browser_version": False,"raw_proxy": "","startup_urls": "","is_masked_font": True,"is_noise_canvas": False,"is_noise_webgl": False,"is_noise_client_rect": False,"is_noise_audio_context": True,"is_random_screen": False,"is_masked_webgl_data": True,"is_masked_media_device": True,"is_random_os": False,"os": "Windows 11","webrtc_mode": 2,"user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
 		}
-		response = requests.post(url, json=data, headers=headers)
+		try:response = requests.post(url, json=data, headers=headers)
+		except:
+			for hhh in range(10):
+				print("Lỗi GPMM")		
 		if response.status_code == 200:
 			result = response.json()
 			print("Profile created successfully:")
@@ -109,7 +112,6 @@ def Reg(stt,MK,NoiChuaprofile,proxy,haiepakhong):
 		try:
 			WebWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div/div/div/div/div/div/div[2]/div/div/div[1]/div/div/div[1]/div/div/div/div/div/div/div/div[2]/div/div/div[2]/div/div/div/div/div[1]/div/span/span")))
 			print("Dieeeeeeeeeeeee")
-			time.sleep(5)
 		except:
 			try:driver.find_element(By.XPATH, "/html/body/div[1]/div[1]/div[1]/div[2]/div/div[2]/div/div/div[1]/form/div[1]/div[11]/button").click()
 			except:pass
