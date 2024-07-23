@@ -7,7 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait as WebWait
 from selenium.webdriver.support import expected_conditions as EC
 import time, requests, json ,string ,random,os
 import requests
-def Reg(stt,MK,NoiChuaprofile,proxy,haiepakhong):
+def Reg(stt,MK,NoiChuaprofile,proxy,haiepakhong,ten):
 	def generate_random_password(length=15):
 	    if length < 2:
 	        raise ValueError("Length must be at least 2 to include a special character")
@@ -31,14 +31,14 @@ def Reg(stt,MK,NoiChuaprofile,proxy,haiepakhong):
 		MK=generate_random_password()
 		print("Mật khẩu ngẫu nhiên là:", MK)
 	try:
-		xx=stt*(800*2)
+		xx=stt*(800*1)
 		yy=0
-		if xx >= (3200*2) :
-			xx= (stt-4)*(800*2)
+		if xx >= (3200*1) :
+			xx= (stt-4)*(800*1)
+			yy=600
+		if xx >= (3200*2):
+			xx= (stt-8)*(800*1)
 			yy=1200
-		if xx >= (3200*4):
-			xx= (stt-8)*(800*2)
-			yy=2400
 
 		def get_messages(login, domain):
 			url = f"https://www.1secmail.com/api/v1/?action=getMessages&login={login}&domain={domain}"
@@ -94,9 +94,9 @@ def Reg(stt,MK,NoiChuaprofile,proxy,haiepakhong):
 		options.add_argument("--disable-blink-features=AutomationControlled")
 		options.add_experimental_option("excludeSwitches", ["enable-automation"])
 		options.add_argument(f"window-position={xx},{yy}")
-		options.add_argument("--force-device-scale-factor=0.25")
+		options.add_argument("--force-device-scale-factor=0.5")
 		options.add_argument(f'--app=https://www.facebook.com/reg')
-		options.add_argument(f"window-size=1600,1200")
+		options.add_argument(f"window-size=800,600")
 		driver = webdriver.Chrome(options=options)
 		WebWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div[1]/div[1]/div[2]/div/div[2]/div/div/div[1]/form/div[1]/div[1]/div[1]/div[1]/div/div[1]/input")))
 		name=requests.get("https://story-shack-cdn-v2.glitch.me/generators/vietnamese-name-generator/male?count=5").json()['data'][1]['name']
@@ -137,9 +137,7 @@ def Reg(stt,MK,NoiChuaprofile,proxy,haiepakhong):
 				WebWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[1]/div/div/div[1]/div[1]/div[2]/div[1]/div[2]/div/div/div/div[2]/div/main/div/div/div[2]/div[1]/div[2]/div/div/div[2]/a/div[1]/div/div[1]/div/div/span")))
 				driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/div[1]/div/div/div[1]/div[1]/div[2]/div[1]/div[2]/div/div/div/div[2]/div/main/div/div/div[2]/div[1]/div[2]/div/div/div[2]/a/div[1]/div/div[1]/div/div/span").click()
 				WebWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[2]/div/div/div/div/div/div/div/div[3]/div[2]/div[4]/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/span[1]/div")))
-				
 				driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[2]/div/div/div/div/div/div/div/div[3]/div[2]/div[4]/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/span[1]/div").click()
-				
 				WebWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, "/html/body/div[6]/div[1]/div/div[2]/div/div/div/div/div/div/div[3]/div[2]/div[4]/div/div/div[3]")))
 				time.sleep(5)
 				driver.find_element(By.XPATH, "//input").send_keys(MK)
@@ -160,7 +158,6 @@ def Reg(stt,MK,NoiChuaprofile,proxy,haiepakhong):
 				driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div[2]/div/div/div/div/div/div[4]/div/div[4]/div[3]/div/div/div/div/div/div/div").click()
 
 			else:towFa=''
-			
 			with open("FacebookLive.txt", "a+", encoding="utf-8") as file:
 				file.write(f"{B}|{MK}|{towFa}|{mailll}\n")
 		time.sleep(3)
@@ -171,16 +168,17 @@ proxy=input("Nhập Tệp Proxy (Enter Để K chạy Proxy): ")
 NoiChuaprofile=input("Nhập Nơi Chứa Profiles GPM: ")
 luong=input("Nhập Số Luồng Muốn chạy : ")
 haiepakhong=input("Bật 2fa (y/n) : ")
-requests.get(f"https://api.telegram.org/bot7055705243:AAFIdPKDh2Npaz0LtGkujlCd_YU5MdIqLQ8/sendMessage?chat_id=5724397112&text=[REGFB] Tool Đang chạy : \n Luồng : {luong}")
+ten=int(input("Tên Nước Ngoài [1] | Tên Việt Name [2] : "))
+requests.get(f"https://api.telegram.org/bot7055705243:AAFIdPKDh2Npaz0LtGkujlCd_YU5MdIqLQ8/sendMessage?chat_id=5724397112&text=[REGFBv2] Tool Đang chạy : \n Luồng : {luong}")
 if len(proxy) >= 10:
 	with open(proxy, 'r+', encoding='utf-8') as file:
 		AAAA=file.read().split()
 for x in range(int(luong)):
-	def run(x,MK,NoiChuaprofile,proxy,haiepakhong):
+	def run(x,MK,NoiChuaprofile,proxy,haiepakhong,ten):
 		x=int(x)
 		while True:
 			if len(proxy) >= 10:
 				proxy=random.choice(AAAA)
 				print('Proxy : ',proxy)
-			Reg(x,MK,NoiChuaprofile,proxy,haiepakhong)
-	Thread(target=run,args=(str(x),MK,NoiChuaprofile,proxy,haiepakhong)).start()
+			Reg(x,MK,NoiChuaprofile,proxy,haiepakhong,ten)
+	Thread(target=run,args=(str(x),MK,NoiChuaprofile,proxy,haiepakhong,ten)).start()
