@@ -1,0 +1,201 @@
+import { world } from "@minecraft/server"
+import { ActionFormData,ModalFormData } from "@minecraft/server-ui"
+export function rec(player, objective, min, max) {
+    if (min == max) { return min }  
+    const middle = min + Math.floor((max - min) / 2)
+    const p1 = world.getPlayers({ name: player.name, scoreOptions: [{ objective: objective, minScore: min, maxScore: middle }] })
+    if (p1.length === 1) { return rec(player, objective, min, middle) } 
+    else { return rec(player, objective, middle + 1, max) } 
+}
+export function getScore(player, objective) {
+    const p1 = world.getPlayers({ name: player.name, scoreOptions: [{ objective: objective, minScore: -2147483648, maxScore: 2147483647 }] })
+    if (p1.length === 0) { return 0 } 
+    return rec(player, objective, -2147483648, 2147483647) 
+}
+export function Taixiu(player){
+    var cuocxiu = getScore(player.name, "cuocxiu")
+    var cuoctai = getScore(player.name, "cuoctai")
+    var money = getScore(player.name, "money")
+    const ui2 = new ActionFormData()
+    .title("§g§r")
+    .button(`${cuoctai}`, "textures/tai")
+    .button("", "textures/dia")
+    .button(`${cuocxiu}`, "textures/xiu")
+    .button(``, "textures/datcuoc2")
+    .button(`Money : ${money}`)
+    .button("", "textures/datcuoc1")
+    .show(player).then((ttn) => {
+        if(ttn.selection == 1){
+            player.runCommand('/playsound random.enderchestopen @s')
+
+            s631(player)
+        }
+        if(ttn.selection == 5){
+            player.runCommand('/playsound random.door_open @s')
+
+            NhapSotienXiu(player)
+        }
+        if(ttn.selection == 3){
+            player.runCommand('/playsound random.door_open @s')
+            NhapSotienTai(player)
+        }
+    })
+}
+export function s631(player){
+    var cuocxiu = getScore(player.name, "cuocxiu")
+    var cuoctai = getScore(player.name, "cuoctai")
+    let Win = ['Tai', 'Xiu','Tai', 'Xiu','Tai', 'Xiu','Tai', 'Xiu','Tai', 'Xiu'][Math.floor(Math.random() * 10)];
+    const ui2 = new ActionFormData()
+    ui2.title("§g§r")
+    ui2.body("Còn Thở Là Còn Gỡ")
+    if (Win=='Xiu'){
+        let Xucsac = ['s631', 's116'][Math.floor(Math.random() * 2)];
+        ui2.button(`${cuoctai}`, "textures/tai")
+        ui2.button("", `textures/${Xucsac}`)
+        ui2.button(`${cuocxiu}`, "textures/xiuwin")
+        ui2.button("", "textures/datcuoc1")
+        ui2.button(`Bạn Đã Thắng +${Math.floor(cuocxiu*1.9)}$`)
+    }
+    else{
+        let Xucsac = ['s166', 's366'][Math.floor(Math.random() * 2)];
+        ui2.button(`${cuoctai}`, "textures/taiwin")
+        ui2.button("", `textures/${Xucsac}`)
+        ui2.button(`${cuocxiu}`, "textures/xiu")
+        ui2.button("", "textures/datcuoc1")
+        ui2.button(`Bạn Đã Thắng +${Math.floor(cuoctai*1.9)}$`)
+    }
+    ui2.button("", "textures/datcuoc2")
+    ui2.show(player).then((ttn) => {
+    if (Win=='Xiu'){
+        player.runCommand(`scoreboard players add @s money ${Math.floor(cuocxiu*1.9)}`)
+        player.runCommand(`scoreboard players set @s cuocxiu 0`)
+        player.runCommand(`scoreboard players set @s cuoctai 0`)
+        player.runCommand(`tellraw @s {"rawtext": [{"text": "[§aA§2D§3M§4I§5M§r] §2+ ${Math.floor(cuocxiu*1.9)}$ §rXỉu §7(TTN) !"}]}`)
+    }else{
+        player.runCommand(`scoreboard players add @s money ${Math.floor(cuoctai*1.9)}`)
+        player.runCommand(`scoreboard players set @s cuocxiu 0`)
+        player.runCommand(`scoreboard players set @s cuoctai 0`)
+        player.runCommand(`tellraw @s {"rawtext": [{"text": "[§aA§2D§3M§4I§5M§r] §2+ ${Math.floor(cuoctai*1.9)}$ §rTài §7(TTN) !"}]}`)
+    }
+    Taixiu(player)
+    })
+}
+export function NhapSotienTai(player){
+    var money = getScore(player.name, "money")
+    let form = new ModalFormData()
+    form.title("Cửa TÀI");
+    form.textField(`§aĐặt Cược Cửa TÀI [Win x1,9]\n§bBạn Đang Có ${money}$ \n§cMIN: 100$ || MAX: 10000$`, "Nhập Số")
+    form.show(player).then(r => {
+        player.runCommand('/playsound random.door_open @s')
+
+        if (money >= r.formValues[0] && r.formValues[0] > 99 && r.formValues[0] <10001){
+            player.runCommand(`scoreboard players remove @s money ${r.formValues[0]}`)
+            player.runCommand(`scoreboard players add @s cuoctai ${r.formValues[0]}`)
+            player.runCommand(`tellraw @s {"rawtext": [{"text": "[§aA§2D§3M§4I§5M§r] §2Bạn Cược Thành Công §7(TTN) !"}]}`)
+
+        }else{
+            player.runCommand(`tellraw @s {"rawtext": [{"text": "[§aA§2D§3M§4I§5M§r] §cSố Dư Không Đủ / Nhập Sai Yêu Cầu §7(TTN) !"}]}`)
+        }
+        Taixiu(player)
+    }).catch(e => {
+        console.error(e, e.stack);
+    });
+}
+export function NhapSotienXiu(player){
+    var money = getScore(player.name, "money")
+    let form = new ModalFormData()
+    form.title("Cửa Xỉu");
+    form.textField(`§aĐặt Cược Cửa Xỉu [Win x1,9]\n§bBạn Đang Có ${money}$ \n§cMIN: 100$ || MAX: 10000$`, "Nhập Số")
+    form.show(player).then(r => {
+        player.runCommand('/playsound random.door_open @s')
+        if (money >= r.formValues[0] && r.formValues[0] > 99 && r.formValues[0] <10001){
+            player.runCommand(`scoreboard players remove @s money ${r.formValues[0]}`)
+            player.runCommand(`scoreboard players add @s cuocxiu ${r.formValues[0]}`)
+            player.runCommand(`tellraw @s {"rawtext": [{"text": "[§aA§2D§3M§4I§5M§r] §2Bạn Cược Thành Công §7(TTN) !"}]}`)
+
+        }else{
+            player.runCommand(`tellraw @s {"rawtext": [{"text": "[§aA§2D§3M§4I§5M§r] §cSố Dư Không Đủ / Nhập Sai Yêu Cầu §7(TTN) !"}]}`)
+        }
+        Taixiu(player)
+    }).catch(e => {
+        console.error(e, e.stack);
+    });
+}
+
+
+
+export function main(player){
+    player.runCommand("/scoreboard objectives add cuoctai dummy")
+    player.runCommand("/scoreboard objectives add money dummy")
+    player.runCommand("/scoreboard objectives add cuocxiu dummy")
+    player.runCommand("/scoreboard players add @s money 0")
+    player.runCommand("/scoreboard players add @s cuoctai 0")
+    player.runCommand("/scoreboard players add @s cuocxiu 0")
+    var money = getScore(player.name, "money")
+    const ui2 = new ActionFormData()
+    .title(`§y§r§2Money : §r${money}$`)
+    .body("Còn Thở Là Còn Gỡ")
+    .button("Tài Xỉu", "textures/s631")
+    .button("Bầu Cua", "textures/baucua")
+    .show(player).then((ttn) => {
+        if(ttn.selection == 0){
+            Taixiu(player)
+            player.runCommand('/playsound random.door_open @s')
+        }
+        if(ttn.selection == 1){
+            baucua(player)
+            player.runCommand('/playsound random.door_open @s')
+        }
+    })
+}
+
+
+
+
+
+
+world.afterEvents.entityHitEntity.subscribe((data) => {
+    let entity = data.hitEntity
+    let player = data.damagingEntity
+    if (entity.hasTag("TTN:casiso")) {main(player)}
+});
+
+            
+
+
+
+
+// world.afterEvents.itemUse.subscribe((event) => {
+//     const { source, itemStack } = event
+//     switch (itemStack.typeId) {
+//         case "minecraft:compass": main(source); break;
+//     }
+// })
+
+
+export function baucua(player){
+    var cuocxiu = getScore(player.name, "cuocxiu")
+    var cuoctai = getScore(player.name, "cuoctai")
+    var money = getScore(player.name, "money")
+    const ui2 = new ActionFormData()
+    .title("§o§ra")
+    .button(``)
+   
+
+    .show(player).then((ttn) => {
+        if(ttn.selection == 1){
+            player.runCommand('/playsound random.enderchestopen @s')
+
+            s631(player)
+        }
+        if(ttn.selection == 5){
+            player.runCommand('/playsound random.door_open @s')
+
+            NhapSotienXiu(player)
+        }
+        if(ttn.selection == 3){
+            player.runCommand('/playsound random.door_open @s')
+            NhapSotienTai(player)
+        }
+    })
+}
